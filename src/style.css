@@ -131,7 +131,7 @@ h3 {
   letter-spacing: 0.16em;
   text-transform: uppercase;
 }
-/* Top telemetry always stays left of the mutation rail. */
+/* On desktop, top telemetry reserves space for the mutation rail. */
 .resource-header {
   position: absolute;
   z-index: 12;
@@ -160,9 +160,6 @@ h3 {
   font-size: var(--type-control);
   font-weight: 800;
   letter-spacing: 0.04em;
-}
-#pause-button {
-  background: linear-gradient(135deg, #315872, #20314d);
 }
 #restart-button {
   background: linear-gradient(135deg, #7b364d, #4a1d3c);
@@ -762,13 +759,6 @@ button[data-action="buy-upgrade"] {
   box-shadow:
     0 0 1.8rem rgb(200 247 90 / 40%),
     inset 0 1px rgb(255 255 255 / 55%);
-}
-body[data-simulation-status="paused"] .scene-panel {
-  filter: saturate(0.58) brightness(0.8);
-}
-body[data-simulation-status="paused"] #pause-button {
-  color: var(--metabolic);
-  border-color: var(--metabolic);
 }
 body[data-colony-phase="lineage"] #cell-stage {
   box-shadow: inset 0 0 5rem rgb(200 247 90 / 19%);

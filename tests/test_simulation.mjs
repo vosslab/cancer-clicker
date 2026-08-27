@@ -4,7 +4,6 @@ import test from "node:test";
 import { ECONOMY_CONFIG, SIMULATION_STEP_SECONDS } from "../src/constants.ts";
 import { createInitialState } from "../src/game_state.ts";
 import {
-  adjustAllocation,
   advanceSimulation,
   calculateEconomySnapshot,
   calculateUpgradeCost,
@@ -25,7 +24,6 @@ function advanceMany(state, steps) {
 test("simulation is deterministic for identical endless colony transitions", () => {
   function simulateColony() {
     let state = setSimulationStatus(createInitialState(), "running");
-    state = adjustAllocation(state, "growth", 5);
     state = harvestNutrientBurst(state);
     state = purchaseUpgrade(state, "transporters");
     return advanceMany(state, 10);
@@ -34,15 +32,13 @@ test("simulation is deterministic for identical endless colony transitions", () 
   assert.deepEqual(simulateColony(), simulateColony());
 });
 
-test("a running click gives a useful biomass harvest while ready and paused clicks are inert", () => {
+test("a running click gives a useful biomass harvest while ready clicks are inert", () => {
   const ready = createInitialState();
-  const paused = setSimulationStatus(ready, "paused");
   const running = setSimulationStatus(ready, "running");
   const harvested = harvestNutrientBurst(running);
   const biomassGain = harvested.resources.biomass - running.resources.biomass;
 
   assert.equal(harvestNutrientBurst(ready), ready);
-  assert.equal(harvestNutrientBurst(paused), paused);
   assert.ok(biomassGain >= 0.8 && biomassGain <= 1.2);
 });
 
@@ -103,10 +99,6 @@ test("host takeover changes to the endless lineage phase once and keeps running"
   assert.equal(takeover.phase, "lineage");
   assert.equal(takeover.status, "running");
   assert.ok(continuing.lineageExpansion > takeover.lineageExpansion);
-  assert.equal(
-    continuing.recentEvents.filter((event) => event.includes("Host control reached 100")).length,
-    1,
-  );
 });
 
 test("immune stress reaches a durable health floor instead of ending the clicker", () => {
@@ -114,7 +106,6 @@ test("immune stress reaches a durable health floor instead of ending the clicker
     ...setSimulationStatus(createInitialState(), "running"),
     cellMass: 50_000,
     immunePressure: 100,
-    allocation: { uptake: 10, growth: 80, evasion: 10 },
   };
   const enduring = advanceMany(stressed, 400);
 
@@ -202,7 +193,6 @@ test("published passive resource rates remain finite and never create a visible 
   const initialEconomy = calculateEconomySnapshot(createInitialState());
   const stressed = {
     ...setSimulationStatus(createInitialState(), "running"),
-    allocation: { uptake: 10, growth: 80, evasion: 10 },
     cellMass: 5_000_000,
   };
   const stressedEconomy = calculateEconomySnapshot(stressed);
@@ -237,11 +227,10 @@ test("lineage expansion is dormant before takeover and accelerates after it", ()
   assert.ok(calculateEconomySnapshot(lineage).lineageExpansionRate > 0);
 });
 
-test("allocation and simulation reject invalid inputs", () => {
+test("simulation and upgrade calculations reject invalid inputs", () => {
   const initial = createInitialState();
 
   assert.throws(() => advanceSimulation(initial, -1), /finite and non-negative/);
   assert.throws(() => advanceSimulation(initial, Number.NaN), /finite and non-negative/);
-  assert.throws(() => adjustAllocation(initial, "growth", 3), /five-point shift/);
   assert.throws(() => calculateUpgradeCost("transporters", -1), /non-negative safe integers/);
 });

@@ -17,12 +17,10 @@ let state: SimulationState = createInitialState();
 
 function main(): void {
   const startButton = requiredElement<HTMLButtonElement>("#start-button");
-  const pauseButton = requiredElement<HTMLButtonElement>("#pause-button");
   const restartButton = requiredElement<HTMLButtonElement>("#restart-button");
   const cellClickTarget = requiredElement<HTMLButtonElement>("#cell-click-target");
 
   startButton.addEventListener("click", startSimulation);
-  pauseButton.addEventListener("click", togglePause);
   restartButton.addEventListener("click", restartSimulation);
   cellClickTarget.addEventListener("click", harvestNutrients);
   cellClickTarget.addEventListener("animationend", removeClickFeedback);
@@ -46,17 +44,6 @@ function startSimulation(): void {
   render();
 }
 
-function togglePause(): void {
-  if (state.status === "running") {
-    state = setSimulationStatus(state, "paused");
-  } else if (state.status === "paused") {
-    state = setSimulationStatus(state, "running");
-  } else {
-    return;
-  }
-  render();
-}
-
 function restartSimulation(): void {
   state = createInitialState();
   render();
@@ -69,10 +56,6 @@ function harvestNutrients(): void {
 }
 
 function advanceClock(): void {
-  if (state.status !== "running") {
-    return;
-  }
-
   state = advanceSimulation(state, SIMULATION_STEP_SECONDS);
   render();
 }

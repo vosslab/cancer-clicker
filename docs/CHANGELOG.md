@@ -21,8 +21,7 @@
 - Added a responsive 16:10 clicker interface with an organic, inside-the-body visual treatment.
 - Added editable SVG source art for the tissue, founding cell, daughter colony, immune patrol, and
   mutation signatures.
-- Added runtime controls for awakening, pausing or resuming, restarting, clicking the cell, and
-  purchasing mutations.
+- Added runtime controls for awakening, restarting, clicking the cell, and purchasing mutations.
 - Added GitHub Pages asset copying so the built `dist/` includes the authored SVG art.
 - Added deterministic Node simulation tests and production-built Playwright browser smoke tests.
 
@@ -38,10 +37,14 @@
   expansion publishes its own rate after host takeover.
 - Passive resource rates and visible stocks are clamped non-negative. Mutation purchases are the
   only way the player spends an affordable resource.
+- Passive resource and lineage accumulation continues while the page is open; the simplified
+  clicker has no pause control or frozen simulation state.
 - Enlarged telemetry, controls, progress labels, and mutation-card text make the always-open shop
   and compact colony HUD readable relative to the tissue field.
 - On narrow portrait screens, the exact 16:10 tissue chamber stays intact and the permanent shop
   stacks below it. The lineage HUD remains hidden until the lineage phase begins.
+- Removed the unused metabolic-allocation controls and event-log pipeline so the visible clicker
+  loop is the simulation's only player-facing economy model.
 
 ### Decisions and Failures
 
@@ -52,6 +55,8 @@
   reachable by real clicks.
 - Playwright also exposed a CSS `hidden` override that could reveal the pre-takeover lineage HUD;
   the HUD now remains hidden until the lineage phase starts.
+- Audit cleanup replaced brittle font-size, pixel-alignment, and redundant CSS assertions with
+  behavioral browser checks while retaining the real interaction and aspect-ratio coverage.
 - The first `npm install` failed because the shared `~/.npm` cache was root-owned. Installation
   succeeded with the writable `/Users/vosslab/.cache/npm` cache; no `sudo` workaround is needed.
 
@@ -64,6 +69,8 @@
 - Playwright uses visible clicks to buy all four mutations and verifies each matching antigen SVG
   layer activates; Node verifies exact published-rate-to-delta equality and strictly distinct
   mutation recipe ingredients.
+- README now links directly to the Pages workflow, editable SVG source, and deterministic economy
+  test source for faster maintenance navigation.
 - `source source_me.sh && python3 -m pytest tests/` passed 597 tests.
 - These checks establish a Pages-ready build; the live GitHub Pages deployment is confirmed at the
   README link.

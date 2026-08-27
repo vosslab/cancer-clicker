@@ -53,22 +53,18 @@ export function renderGame(
   renderLineage(state, economy);
   renderCellEvolution(state);
 
-  const pauseButton = requiredElement<HTMLButtonElement>("#pause-button");
   const startOverlay = requiredElement<HTMLElement>("#start-overlay");
   const cellStage = requiredElement<HTMLElement>("#cell-stage");
   document.body.dataset["simulationStatus"] = state.status;
   document.body.dataset["colonyPhase"] = state.phase;
   startOverlay.hidden = state.status !== "ready";
-  pauseButton.textContent = state.status === "paused" ? "Resume" : "Pause";
-  pauseButton.disabled = state.status === "ready";
-  pauseButton.setAttribute("aria-pressed", String(state.status === "paused"));
 
   const immuneAlert = state.immunePressure >= IMMUNE_ALERT_THRESHOLD;
   cellStage.dataset["immuneAlert"] = String(immuneAlert);
   requiredElement<HTMLElement>("#game-message").textContent = describeGameState(state, immuneAlert);
-  renderResourceTrend(".resource-nutrients", economy.nutrientIncome);
-  renderResourceTrend(".resource-energy", economy.energyProduction - economy.upkeep);
-  renderResourceTrend(".resource-biomass", economy.biomassProduction);
+  renderResourceTrend(".resource-nutrients", economy.nutrientStockRate);
+  renderResourceTrend(".resource-energy", economy.energyStockRate);
+  renderResourceTrend(".resource-biomass", economy.biomassStockRate);
   createNutrientParticles();
 }
 
@@ -194,8 +190,6 @@ function createNutrientParticles(): void {
 
 function describeGameState(state: SimulationState, immuneAlert: boolean): string {
   if (state.status === "ready") return "The transformed cell is ready to wake.";
-  if (state.status === "paused")
-    return "Paused. Spend resources in the Mutation Shop when you are ready.";
   if (state.phase === "lineage")
     return "Host control is complete. The lineage keeps spreading: build a messy immortal colony.";
   if (immuneAlert)

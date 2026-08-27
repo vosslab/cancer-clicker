@@ -27,7 +27,8 @@ Each resource card publishes its current live passive rate as `+amount/s`: nutri
 biomass. The lineage HUD publishes the same rate once host control reaches 100%. These are the
 actual stock deltas used by the simulation, not decorative estimates. Passive rates and resource
 stocks never become negative; only an affordable Mutation Shop purchase spends resources. Rates
-respond immediately to metabolic allocation, cell health, and purchased mutations.
+respond immediately to cell health and purchased mutations. The colony keeps accumulating while
+the page is open, including when it is idle between clicks.
 
 ## Play now
 
@@ -45,16 +46,20 @@ Build the GitHub Pages-ready `dist/` folder:
 ./build_github_pages.sh
 ```
 
-`deploy-pages.yml` is the root workflow seed for publishing that folder. The confirmed deployment is
-available at the live link above.
+[.github/workflows/deploy-pages.yml](.github/workflows/deploy-pages.yml) publishes that folder. The
+confirmed deployment is available at the live link above.
 
 ## Designed to be watched
 
 The game is a visual clicker first: on desktop, the application window and playfield are both 16:10. On a narrow portrait screen, the tissue chamber remains an exact 16:10 field and the permanently open shop stacks below it, keeping targets and copy readable rather than squeezing the playfield. Enlarged telemetry, controls, shop copy, and progress labels make the resource rates and colony state legible at game scale. The pre-takeover lineage HUD stays hidden until the endless lineage phase begins.
 
-Editable SVG source art includes `src/art/tissue_scene.svg`, `src/art/tumor_cell.svg`, the daughter colony, immune patrol, and four mutation signatures.
+Editable SVG source art includes [the tissue scene](src/art/tissue_scene.svg),
+[the founding cell](src/art/tumor_cell.svg), the daughter colony, immune patrol, and four mutation
+signatures.
 
-Use the visible Awaken, Pause/Resume, Restart, cell, and mutation buttons. Native buttons are keyboard reachable and retain visible focus.
+Use the visible Awaken, Restart, cell, and mutation buttons. The live simulation has no pause
+control, so its passive accumulation remains continuous. Native buttons are keyboard reachable and
+retain visible focus.
 
 ## Checks
 
@@ -80,10 +85,10 @@ Current validation evidence: `./check_codebase.sh` passed 5 checks, including 11
 `./build_github_pages.sh` completed; `./run_playwright_tests.sh --build` passed 2 browser tests;
 `source source_me.sh && python3 -m pytest tests/` passed 597 tests; and authored SVG files passed XML validation. The confirmed live deployment is linked above.
 
-The deterministic economy tests live in `tests/test_simulation.mjs`; they verify published rates
-match exact stock deltas and mutation recipes use strictly distinct ingredients. Browser interaction
-checks live in [tests/playwright/smoke.spec.ts](tests/playwright/smoke.spec.ts), where visible clicks
-buy all four mutations and confirm that each matching antigen SVG layer activates.
+The deterministic economy tests live in [tests/test_simulation.mjs](tests/test_simulation.mjs); they
+verify published rates match exact stock deltas and mutation recipes use strictly distinct
+ingredients. Browser interaction checks live in [tests/playwright/smoke.spec.ts](tests/playwright/smoke.spec.ts),
+where visible clicks buy all four mutations and confirm that each matching antigen SVG layer activates.
 
 ## License
 

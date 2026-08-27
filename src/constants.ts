@@ -1,25 +1,16 @@
-import type {
-  AllocationId,
-  MetabolicAllocation,
-  UpgradeDefinition,
-  UpgradeId,
-  UpgradeLevels,
-} from "./types/simulation";
+import type { UpgradeDefinition, UpgradeId, UpgradeLevels } from "./types/simulation";
 
 export const SIMULATION_STEP_SECONDS = 0.25;
-export const MAX_EVENT_LOG_ENTRIES = 5;
 
-export const ALLOCATION_IDS = [
-  "uptake",
-  "growth",
-  "evasion",
-] as const satisfies readonly AllocationId[];
-
-export const DEFAULT_ALLOCATION = {
-  uptake: 40,
-  growth: 35,
-  evasion: 25,
-} as const satisfies MetabolicAllocation;
+/**
+ * The colony's fixed metabolic profile keeps the simplified clicker economy
+ * balanced without exposing an unused player allocation control.
+ */
+export const METABOLIC_PROFILE = {
+  nutrientUptakeShare: 0.4,
+  biomassGrowthShare: 0.35,
+  immuneEvasionShare: 0.25,
+} as const;
 
 export const INITIAL_UPGRADE_LEVELS = {
   transporters: 0,

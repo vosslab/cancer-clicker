@@ -1,13 +1,9 @@
 export type GameTick = number & { readonly __brand: "GameTick" };
 
-export type SimulationStatus = "ready" | "running" | "paused";
+export type SimulationStatus = "ready" | "running";
 
 /** The colony begins inside one host and becomes an immortal lineage at takeover. */
 export type ColonyPhase = "host" | "lineage";
-
-export type AllocationId = "uptake" | "growth" | "evasion";
-
-export type MetabolicAllocation = Readonly<Record<AllocationId, number>>;
 
 export type ResourceStock = Readonly<{
   nutrients: number;
@@ -21,7 +17,6 @@ export type SimulationState = Readonly<{
   status: SimulationStatus;
   phase: ColonyPhase;
   resources: ResourceStock;
-  allocation: MetabolicAllocation;
   upgradeLevels: UpgradeLevels;
   cellMass: number;
   hostControl: number;
@@ -29,7 +24,6 @@ export type SimulationState = Readonly<{
   cellHealth: number;
   immunePressure: number;
   bloodFlow: number;
-  recentEvents: readonly string[];
 }>;
 
 export type UpgradeId = "transporters" | "glycolysis" | "angiogenesis" | "immune_cloak";
@@ -52,11 +46,11 @@ export type UpgradeDefinition = Readonly<{
 }>;
 
 export type EconomySnapshot = Readonly<{
-  /** Net nutrient stock change per simulation second, before a zero-stock clamp. */
+  /** Actual nonnegative nutrient stock change per running simulation second. */
   nutrientStockRate: number;
-  /** Net ATP reserve change per simulation second, before a zero-stock clamp. */
+  /** Actual nonnegative ATP reserve change per running simulation second. */
   energyStockRate: number;
-  /** Net biomass stockpile change per simulation second, before a zero-stock clamp. */
+  /** Actual nonnegative biomass stockpile change per running simulation second. */
   biomassStockRate: number;
   /** Endless colony-spread gain per second; zero until host control is complete. */
   lineageExpansionRate: number;

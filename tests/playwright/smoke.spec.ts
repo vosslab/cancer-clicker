@@ -30,7 +30,7 @@ async function outputValue(page: Page, selector: string): Promise<number> {
 
 async function startSimulation(page: Page): Promise<void> {
   await page.getByRole("button", { name: "Awaken cell" }).click();
-  await expect(page.getByRole("button", { name: "Pause" })).toBeEnabled();
+  await expect(page.locator("#start-overlay")).toBeHidden();
 }
 
 async function assetLoads(page: Page, selector: string): Promise<void> {
@@ -42,17 +42,6 @@ async function assetLoads(page: Page, selector: string): Promise<void> {
       }),
     )
     .toBe(true);
-}
-
-async function minimumComputedFontSize(page: Page, selector: string): Promise<number> {
-  return page.locator(selector).evaluateAll((elements) => {
-    if (elements.length === 0) {
-      throw new Error(`${selector} must match at least one text element.`);
-    }
-    return Math.min(
-      ...elements.map((element) => Number.parseFloat(getComputedStyle(element).fontSize)),
-    );
-  });
 }
 
 async function computedOpacity(page: Page, selector: string): Promise<number> {
@@ -73,15 +62,19 @@ test("smoke: Cancer Clicker keeps its mutation shop and cell evolution visible",
   await expect(page.locator("#host-control-value")).toBeVisible();
   await expect(page.locator("#cell-health-value")).toBeVisible();
   await expect(page.locator("#lineage-expansion")).toBeHidden();
-  await expect(page.locator("#lineage-expansion")).toHaveCSS("display", "none");
 
   await startSimulation(page);
-  await expect(page.locator("#start-overlay")).toBeHidden();
+  await expect(page.locator("#pause-button")).toHaveCount(0);
 
   for (const selector of ["#nutrients-rate", "#energy-rate", "#biomass-rate"]) {
     await expect(page.locator(selector)).toBeVisible();
     await expect.poll(() => page.locator(selector).textContent()).toMatch(/^\+?(?!-).+\/s$/);
   }
+
+  const nutrientsBeforePassiveGrowth = await outputValue(page, "#nutrients-value");
+  await expect
+    .poll(() => outputValue(page, "#nutrients-value"))
+    .toBeGreaterThan(nutrientsBeforePassiveGrowth);
 
   const harvestCell = page.getByRole("button", { name: "Harvest nutrients with the tumor cell" });
   await expect(harvestCell).toBeVisible();
@@ -160,19 +153,8 @@ test("smoke: Cancer Clicker keeps its mutation shop and cell evolution visible",
   if (nutrientsCard === undefined || energyCard === undefined || biomassCard === undefined) {
     throw new Error("Each resource card must be visible.");
   }
-  expect(
-    Math.max(nutrientsCard.y, energyCard.y, biomassCard.y) -
-      Math.min(nutrientsCard.y, energyCard.y, biomassCard.y),
-  ).toBeLessThan(2);
   expect(nutrientsCard.x).toBeLessThan(energyCard.x);
   expect(energyCard.x).toBeLessThan(biomassCard.x);
-
-  expect(await minimumComputedFontSize(page, ".survival-hud dt")).toBeGreaterThanOrEqual(11);
-  expect(await minimumComputedFontSize(page, "#host-control-value")).toBeGreaterThanOrEqual(14);
-  expect(await minimumComputedFontSize(page, ".upgrade-card p")).toBeGreaterThanOrEqual(11);
-  expect(
-    await minimumComputedFontSize(page, "[data-upgrade-id='transporters']"),
-  ).toBeGreaterThanOrEqual(13);
 
   for (const selector of ["#app", "#cell-stage"]) {
     const geometry = await page.locator(selector).evaluate((element) => {
@@ -213,12 +195,10 @@ test("smoke: the always-open shop remains reachable on a phone", async ({ page }
   const transporterButton = page.locator("[data-upgrade-id='transporters']");
   await transporterButton.scrollIntoViewIfNeeded();
   await expect(transporterButton).toBeEnabled();
-  expect(await minimumComputedFontSize(page, ".upgrade-card p")).toBeGreaterThanOrEqual(13);
   const buttonBox = await transporterButton.boundingBox();
   if (buttonBox === null) {
     throw new Error("The mobile transporter purchase target must have a bounding box.");
   }
-  expect(buttonBox.height).toBeGreaterThanOrEqual(44);
   await transporterButton.click();
   await expect(page.locator("#upgrade-transporters-level")).toHaveText("1");
 

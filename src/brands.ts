@@ -7,8 +7,3 @@ export function asGameTick(value: number): GameTick {
 
   return value as GameTick;
 }
-
-export function nextGameTick(tick: GameTick): GameTick {
-  const nextValue = tick + 1;
-  return asGameTick(nextValue);
-}

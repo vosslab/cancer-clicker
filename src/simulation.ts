@@ -1,7 +1,6 @@
 import { asGameTick } from "./brands";
-import { ALLOCATION_IDS, ECONOMY_CONFIG, MAX_EVENT_LOG_ENTRIES, UPGRADE_CONFIG } from "./constants";
+import { ECONOMY_CONFIG, METABOLIC_PROFILE, UPGRADE_CONFIG } from "./constants";
 import type {
-  AllocationId,
   ColonyPhase,
   EconomySnapshot,
   ResourceCost,
@@ -11,9 +10,6 @@ import type {
   UpgradeId,
 } from "./types/simulation";
 
-const MIN_ALLOCATION = 10;
-const MAX_ALLOCATION = 80;
-const ALLOCATION_STEP = 5;
 const NUMBER_CAP = Number.MAX_SAFE_INTEGER;
 const MAX_UPKEEP_SHARE = 0.85;
 const MAX_GROWTH_INVESTMENT_SHARE = 0.85;
@@ -21,9 +17,7 @@ const MAX_GROWTH_INVESTMENT_SHARE = 0.85;
 //============================================
 
 export function calculateEconomySnapshot(state: SimulationState): EconomySnapshot {
-  const uptakeShare = state.allocation.uptake / 100;
-  const growthShare = state.allocation.growth / 100;
-  const evasionShare = state.allocation.evasion / 100;
+  const { nutrientUptakeShare, biomassGrowthShare, immuneEvasionShare } = METABOLIC_PROFILE;
   const transporters = upgradeEffect(state.upgradeLevels.transporters, 0.3);
   const glycolysis = upgradeEffect(state.upgradeLevels.glycolysis, 0.38);
   const angiogenesis = upgradeEffect(state.upgradeLevels.angiogenesis, 0.6);
@@ -37,14 +31,14 @@ export function calculateEconomySnapshot(state: SimulationState): EconomySnapsho
   const nutrientIncome = safeProduct(
     ECONOMY_CONFIG.baseNutrientIncome,
     state.bloodFlow,
-    0.45 + uptakeShare * 1.15,
+    0.45 + nutrientUptakeShare * 1.15,
     captureMultiplier,
     immuneResilience,
   );
   const energyProduction = safeProduct(
     nutrientIncome,
     ECONOMY_CONFIG.baseEnergyYield,
-    0.72 + growthShare * 0.28,
+    0.72 + biomassGrowthShare * 0.28,
     glycolysis,
     healthProductionFactor,
   );
@@ -59,14 +53,14 @@ export function calculateEconomySnapshot(state: SimulationState): EconomySnapsho
   const biomassProduction = safeProduct(
     Math.max(0, energyProduction - upkeep),
     ECONOMY_CONFIG.baseGrowthEfficiency,
-    0.35 + growthShare * 1.3,
+    0.35 + biomassGrowthShare * 1.3,
     1 + Math.log1p(state.upgradeLevels.glycolysis) * 0.16,
     healthProductionFactor,
   );
   const nutrientUse = energyProduction / ECONOMY_CONFIG.baseEnergyYield;
   const nutrientStockRate = Math.max(0, safeAdd(nutrientIncome, -nutrientUse));
   const energyStockRate = Math.max(0, safeAdd(energyProduction, -upkeep));
-  const growthInvestmentShare = Math.min(MAX_GROWTH_INVESTMENT_SHARE, 0.35 + growthShare);
+  const growthInvestmentShare = Math.min(MAX_GROWTH_INVESTMENT_SHARE, 0.35 + biomassGrowthShare);
   const intendedGrowthInvestmentRate = safeProduct(biomassProduction, growthInvestmentShare);
   const biomassStockRate = Math.max(0, safeAdd(biomassProduction, -intendedGrowthInvestmentRate));
   const lineageExpansionRate =
@@ -74,7 +68,7 @@ export function calculateEconomySnapshot(state: SimulationState): EconomySnapsho
       ? safeProduct(
           state.cellMass,
           ECONOMY_CONFIG.lineageExpansionPerMass,
-          0.65 + growthShare,
+          0.65 + biomassGrowthShare,
           upgradeEffect(state.upgradeLevels.transporters, 0.12),
           upgradeEffect(state.upgradeLevels.glycolysis, 0.16),
           immuneResilience,
@@ -82,7 +76,9 @@ export function calculateEconomySnapshot(state: SimulationState): EconomySnapsho
       : 0;
   const effectiveImmunePressure = Math.max(
     0,
-    state.immunePressure - evasionShare * 8 - Math.log1p(state.upgradeLevels.immune_cloak) * 5,
+    state.immunePressure -
+      immuneEvasionShare * 8 -
+      Math.log1p(state.upgradeLevels.immune_cloak) * 5,
   );
   const immuneDamage = safeProduct(
     Math.max(0, effectiveImmunePressure - ECONOMY_CONFIG.immuneDamageThreshold),
@@ -154,40 +150,7 @@ export function purchaseUpgrade(state: SimulationState, upgradeId: UpgradeId): S
       biomass: finiteNonNegative(state.resources.biomass - cost.biomass, "biomass"),
     },
     upgradeLevels: { ...state.upgradeLevels, [upgradeId]: level + 1 },
-    recentEvents: prependEvents(state.recentEvents, [
-      `${UPGRADE_CONFIG[upgradeId].name} upgraded to level ${level + 1}.`,
-    ]),
   };
-}
-
-export function adjustAllocation(
-  state: SimulationState,
-  allocationId: AllocationId,
-  delta: number,
-): SimulationState {
-  if (delta !== ALLOCATION_STEP && delta !== -ALLOCATION_STEP) {
-    throw new Error("Allocation changes must use a five-point shift.");
-  }
-  const targetValue = state.allocation[allocationId] + delta;
-  if (targetValue < MIN_ALLOCATION || targetValue > MAX_ALLOCATION) {
-    return state;
-  }
-  const nextAllocation = { ...state.allocation };
-  let remainingTransfer = Math.abs(delta);
-  for (const otherId of ALLOCATION_IDS.filter((id) => id !== allocationId)) {
-    const capacity =
-      delta > 0
-        ? nextAllocation[otherId] - MIN_ALLOCATION
-        : MAX_ALLOCATION - nextAllocation[otherId];
-    const transfer = Math.min(remainingTransfer, capacity);
-    nextAllocation[otherId] += delta > 0 ? -transfer : transfer;
-    remainingTransfer -= transfer;
-  }
-  if (remainingTransfer > 0) {
-    return state;
-  }
-  nextAllocation[allocationId] = targetValue;
-  return { ...state, allocation: nextAllocation };
 }
 
 export function setSimulationStatus(
@@ -201,11 +164,10 @@ export function harvestNutrientBurst(state: SimulationState): SimulationState {
   if (state.status !== "running") {
     return state;
   }
-  const uptakeShare = state.allocation.uptake / 100;
-  const growthShare = state.allocation.growth / 100;
+  const { nutrientUptakeShare, biomassGrowthShare } = METABOLIC_PROFILE;
   const immuneResilience = immuneResilienceMultiplier(state.upgradeLevels.immune_cloak);
   const nutrientAccess = safeProduct(
-    0.55 + uptakeShare * 1.125,
+    0.55 + nutrientUptakeShare * 1.125,
     upgradeEffect(state.upgradeLevels.transporters, 0.36),
     1 + Math.log1p(state.upgradeLevels.angiogenesis) * 0.2,
     immuneResilience,
@@ -219,7 +181,7 @@ export function harvestNutrientBurst(state: SimulationState): SimulationState {
   );
   // The default is 0.995 biomass per click, preserving the intended clicker cadence.
   const biomassGain = safeProduct(
-    0.75 + growthShare * 0.7,
+    0.75 + biomassGrowthShare * 0.7,
     1 + Math.log1p(state.upgradeLevels.glycolysis) * 0.18,
     immuneResilience,
   );
@@ -296,7 +258,6 @@ export function advanceSimulation(state: SimulationState, deltaSeconds: number):
       "biomass",
     ),
   };
-  const events = thresholdEvents(state, hostControl, cellHealth, immunePressure, phase);
   return {
     ...threatenedState,
     tick: asGameTick(Math.min(NUMBER_CAP, state.tick + 1)),
@@ -305,7 +266,6 @@ export function advanceSimulation(state: SimulationState, deltaSeconds: number):
     lineageExpansion: safeAdd(state.lineageExpansion, lineageGain),
     phase,
     cellHealth,
-    recentEvents: prependEvents(state.recentEvents, events),
   };
 }
 
@@ -319,7 +279,7 @@ function calculateTargetPressure(state: SimulationState, cellMass: number): numb
       8,
       safeProduct(excessMass, 0.7),
       Math.log1p(state.upgradeLevels.angiogenesis) * 11,
-      (-state.allocation.evasion / 100) * 13,
+      -METABOLIC_PROFILE.immuneEvasionShare * 13,
       -Math.log1p(state.upgradeLevels.immune_cloak) * 5.5,
     ),
   );
@@ -332,7 +292,7 @@ function calculateCellHealth(
 ): number {
   const recovery = safeAdd(
     0.34,
-    (state.allocation.evasion / 100) * 0.55,
+    METABOLIC_PROFILE.immuneEvasionShare * 0.55,
     Math.log1p(state.upgradeLevels.immune_cloak) * 0.2,
   );
   return clamp(
@@ -340,37 +300,6 @@ function calculateCellHealth(
     ECONOMY_CONFIG.minimumCellHealth,
     100,
   );
-}
-
-function thresholdEvents(
-  previous: SimulationState,
-  hostControl: number,
-  cellHealth: number,
-  immunePressure: number,
-  phase: ColonyPhase,
-): readonly string[] {
-  const events: string[] = [];
-  if (previous.phase !== phase && phase === "lineage") {
-    events.push("Host control reached 100. The colony now expands as an immortal lineage.");
-  }
-  if (
-    previous.immunePressure < ECONOMY_CONFIG.immuneDamageThreshold &&
-    immunePressure >= ECONOMY_CONFIG.immuneDamageThreshold
-  ) {
-    events.push("Immune pressure is slowing growth. Evasion can improve the production rate.");
-  }
-  if (
-    previous.cellHealth > ECONOMY_CONFIG.minimumCellHealth &&
-    cellHealth === ECONOMY_CONFIG.minimumCellHealth
-  ) {
-    events.push("Immune pressure has reached its drag floor; the lineage continues adapting.");
-  }
-  for (const threshold of [25, 50, 75]) {
-    if (previous.hostControl < threshold && hostControl >= threshold) {
-      events.push(`Host control passed ${threshold} percent.`);
-    }
-  }
-  return events;
 }
 
 function upgradeEffect(level: number, perLogLevel: number): number {
@@ -392,13 +321,6 @@ function validateUpgradeLevel(level: number): void {
   if (!Number.isSafeInteger(level) || level < 0) {
     throw new Error("Upgrade levels must be non-negative safe integers.");
   }
-}
-
-function prependEvents(
-  existingEvents: readonly string[],
-  newEvents: readonly string[],
-): readonly string[] {
-  return [...newEvents, ...existingEvents].slice(0, MAX_EVENT_LOG_ENTRIES);
 }
 
 function clamp(value: number, minimum: number, maximum: number): number {
