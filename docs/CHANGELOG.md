@@ -5,6 +5,7 @@
 ### Additions and New Features
 
 - Renamed the game and npm package to **Cancer Clicker** / `cancer-clicker`.
+- Added the confirmed live GitHub Pages game link to the README landing page.
 - Added an endless visual clicker loop: click the founding cell for nutrients, energy, and about one
   biomass, then spend resources to make later clicks accumulate faster.
 - Added an always-open Mutation Shop with uncapped, escalating mutations: Transporter swarm,
@@ -33,16 +34,36 @@
 - The founding cell stays fixed while colony layers form a messy tumor; it does not simply scale up.
 - The game frame and tissue play area use a visible 16:10 aspect ratio, including a phone-viewport
   smoke check.
+- Resource cards now publish their live nutrient, energy, and biomass stock rates in `/s`; lineage
+  expansion publishes its own rate after host takeover.
+- Passive resource rates and visible stocks are clamped non-negative. Mutation purchases are the
+  only way the player spends an affordable resource.
+- Enlarged telemetry, controls, progress labels, and mutation-card text make the always-open shop
+  and compact colony HUD readable relative to the tissue field.
+- On narrow portrait screens, the exact 16:10 tissue chamber stays intact and the permanent shop
+  stacks below it. The lineage HUD remains hidden until the lineage phase begins.
 
 ### Decisions and Failures
 
 - Initial Playwright work exposed that CSS overrode the start overlay's `hidden` attribute; an
   explicit `#start-overlay[hidden]` selector now hides it correctly.
+- Playwright exposed a mobile click interception where a scene element covered a shop purchase
+  target; the responsive stacking and interaction layers were corrected so the permanent shop is
+  reachable by real clicks.
+- Playwright also exposed a CSS `hidden` override that could reveal the pre-takeover lineage HUD;
+  the HUD now remains hidden until the lineage phase starts.
 - The first `npm install` failed because the shared `~/.npm` cache was root-owned. Installation
   succeeded with the writable `/Users/vosslab/.cache/npm` cache; no `sudo` workaround is needed.
 
 ### Developer Tests and Notes
 
-- Earlier baseline validation: `./check_codebase.sh` passed 5 checks, including 6 Node tests;
-  `./build_github_pages.sh` completed successfully; and `./run_playwright_tests.sh --build` passed
-  2 browser tests. Re-run those commands after the final clicker-interface integration.
+- `./check_codebase.sh` passed 5 checks, including 11 Node tests.
+- `./build_github_pages.sh` completed successfully, including copying the authored SVG assets into
+  the Pages-ready `dist/` folder; authored SVG files also passed XML validation.
+- `./run_playwright_tests.sh --build` passed 2 production-built browser tests.
+- Playwright uses visible clicks to buy all four mutations and verifies each matching antigen SVG
+  layer activates; Node verifies exact published-rate-to-delta equality and strictly distinct
+  mutation recipe ingredients.
+- `source source_me.sh && python3 -m pytest tests/` passed 597 tests.
+- These checks establish a Pages-ready build; the live GitHub Pages deployment is confirmed at the
+  README link.

@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 
-import { ECONOMY_CONFIG } from "../src/constants.ts";
+import { ECONOMY_CONFIG, SIMULATION_STEP_SECONDS } from "../src/constants.ts";
 import { createInitialState } from "../src/game_state.ts";
 import {
   adjustAllocation,
@@ -46,7 +46,7 @@ test("a running click gives a useful biomass harvest while ready and paused clic
   assert.ok(biomassGain >= 0.8 && biomassGain <= 1.2);
 });
 
-test("each mutation improves its relevant click or survival economy", () => {
+test("each mutation improves its relevant click, passive, or survival economy", () => {
   const running = setSimulationStatus(createInitialState(), "running");
   const adapted = {
     ...running,
@@ -66,6 +66,29 @@ test("each mutation improves its relevant click or survival economy", () => {
     calculateEconomySnapshot({ ...adapted, immunePressure: 70 }).immuneDamage <
       calculateEconomySnapshot({ ...running, immunePressure: 70 }).immuneDamage,
   );
+
+  const cloaklessLineage = {
+    ...running,
+    phase: "lineage",
+    hostControl: 100,
+    cellMass: 1_200,
+  };
+  const cloakedLineage = {
+    ...cloaklessLineage,
+    upgradeLevels: { ...cloaklessLineage.upgradeLevels, immune_cloak: 1 },
+  };
+  const cloaklessHarvest = harvestNutrientBurst(cloaklessLineage);
+  const cloakedHarvest = harvestNutrientBurst(cloakedLineage);
+  const cloaklessEconomy = calculateEconomySnapshot(cloaklessLineage);
+  const cloakedEconomy = calculateEconomySnapshot(cloakedLineage);
+
+  for (const resource of ["nutrients", "energy", "biomass"]) {
+    assert.ok(cloakedHarvest.resources[resource] > cloaklessHarvest.resources[resource]);
+  }
+  for (const rate of ["nutrientStockRate", "energyStockRate", "biomassStockRate"]) {
+    assert.ok(cloakedEconomy[rate] > cloaklessEconomy[rate]);
+  }
+  assert.ok(cloakedEconomy.lineageExpansionRate > cloaklessEconomy.lineageExpansionRate);
 });
 
 test("host takeover changes to the endless lineage phase once and keeps running", () => {
@@ -128,7 +151,7 @@ test("mutation recipes debit only their declared resource ingredients", () => {
     transporters: ["biomass"],
     glycolysis: ["nutrients"],
     angiogenesis: ["energy"],
-    immune_cloak: ["nutrients", "energy", "biomass"],
+    immune_cloak: ["energy", "biomass"],
   };
 
   for (const [upgradeId, ingredients] of Object.entries(recipes)) {
@@ -136,9 +159,82 @@ test("mutation recipes debit only their declared resource ingredients", () => {
     const purchased = purchaseUpgrade(abundant, upgradeId);
     for (const resource of ["nutrients", "energy", "biomass"]) {
       const spent = abundant.resources[resource] - purchased.resources[resource];
-      assert.equal(spent, ingredients.includes(resource) ? cost[resource] : 0);
+      if (ingredients.includes(resource)) {
+        assert.ok(cost[resource] > 0);
+        assert.equal(spent, cost[resource]);
+      } else {
+        assert.equal(cost[resource], 0);
+        assert.equal(spent, 0);
+      }
     }
   }
+});
+
+test("published passive rates exactly predict a fixed normal running tick", () => {
+  const running = setSimulationStatus(createInitialState(), "running");
+  const economy = calculateEconomySnapshot(running);
+  const advanced = advanceSimulation(running, SIMULATION_STEP_SECONDS);
+  const rateByResource = {
+    nutrients: economy.nutrientStockRate,
+    energy: economy.energyStockRate,
+    biomass: economy.biomassStockRate,
+  };
+
+  for (const resource of ["nutrients", "energy", "biomass"]) {
+    const expectedDelta = rateByResource[resource] * SIMULATION_STEP_SECONDS;
+    const actualDelta = advanced.resources[resource] - running.resources[resource];
+    const floatingPointTolerance =
+      Number.EPSILON *
+      Math.max(
+        1,
+        Math.abs(running.resources[resource]),
+        Math.abs(advanced.resources[resource]),
+        Math.abs(expectedDelta),
+      );
+    assert.ok(
+      Math.abs(actualDelta - expectedDelta) <= floatingPointTolerance,
+      `${resource} stock delta must match its published passive rate before the tick`,
+    );
+  }
+});
+
+test("published passive resource rates remain finite and never create a visible debt", () => {
+  const initialEconomy = calculateEconomySnapshot(createInitialState());
+  const stressed = {
+    ...setSimulationStatus(createInitialState(), "running"),
+    allocation: { uptake: 10, growth: 80, evasion: 10 },
+    cellMass: 5_000_000,
+  };
+  const stressedEconomy = calculateEconomySnapshot(stressed);
+
+  for (const economy of [initialEconomy, stressedEconomy]) {
+    for (const rate of [
+      economy.nutrientStockRate,
+      economy.energyStockRate,
+      economy.biomassStockRate,
+    ]) {
+      assert.ok(Number.isFinite(rate));
+      assert.ok(rate >= 0);
+    }
+  }
+
+  const advanced = advanceSimulation(stressed, 1);
+  for (const resource of ["nutrients", "energy", "biomass"]) {
+    assert.ok(advanced.resources[resource] >= stressed.resources[resource]);
+  }
+});
+
+test("lineage expansion is dormant before takeover and accelerates after it", () => {
+  const host = setSimulationStatus(createInitialState(), "running");
+  const lineage = {
+    ...host,
+    phase: "lineage",
+    hostControl: 100,
+    cellMass: 1_200,
+  };
+
+  assert.equal(calculateEconomySnapshot(host).lineageExpansionRate, 0);
+  assert.ok(calculateEconomySnapshot(lineage).lineageExpansionRate > 0);
 });
 
 test("allocation and simulation reject invalid inputs", () => {

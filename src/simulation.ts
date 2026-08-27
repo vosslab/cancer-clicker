@@ -15,6 +15,8 @@ const MIN_ALLOCATION = 10;
 const MAX_ALLOCATION = 80;
 const ALLOCATION_STEP = 5;
 const NUMBER_CAP = Number.MAX_SAFE_INTEGER;
+const MAX_UPKEEP_SHARE = 0.85;
+const MAX_GROWTH_INVESTMENT_SHARE = 0.85;
 
 //============================================
 
@@ -26,6 +28,10 @@ export function calculateEconomySnapshot(state: SimulationState): EconomySnapsho
   const glycolysis = upgradeEffect(state.upgradeLevels.glycolysis, 0.38);
   const angiogenesis = upgradeEffect(state.upgradeLevels.angiogenesis, 0.6);
   const immuneCloak = upgradeEffect(state.upgradeLevels.immune_cloak, 0.3);
+  // A cloak does more than prevent damage: a less-interrupted colony can spend
+  // more time capturing and converting resources. This intentionally levels
+  // off so an uncapped mutation shop cannot make the economy numerically wild.
+  const immuneResilience = immuneResilienceMultiplier(state.upgradeLevels.immune_cloak);
   const healthProductionFactor = 0.55 + (state.cellHealth / 100) * 0.45;
   const captureMultiplier = safeProduct(transporters, angiogenesis);
   const nutrientIncome = safeProduct(
@@ -33,6 +39,7 @@ export function calculateEconomySnapshot(state: SimulationState): EconomySnapsho
     state.bloodFlow,
     0.45 + uptakeShare * 1.15,
     captureMultiplier,
+    immuneResilience,
   );
   const energyProduction = safeProduct(
     nutrientIncome,
@@ -41,10 +48,14 @@ export function calculateEconomySnapshot(state: SimulationState): EconomySnapsho
     glycolysis,
     healthProductionFactor,
   );
-  const upkeep = safeAdd(
+  const upkeepDemand = safeAdd(
     ECONOMY_CONFIG.baseUpkeep,
     safeProduct(state.cellMass, ECONOMY_CONFIG.massUpkeep),
   );
+  // The endless clicker economy treats maintenance as a production allocation,
+  // never an unpayable debt. A mature lineage therefore keeps an energy surplus
+  // instead of silently draining its visible energy stock.
+  const upkeep = Math.min(upkeepDemand, safeProduct(energyProduction, MAX_UPKEEP_SHARE));
   const biomassProduction = safeProduct(
     Math.max(0, energyProduction - upkeep),
     ECONOMY_CONFIG.baseGrowthEfficiency,
@@ -53,10 +64,11 @@ export function calculateEconomySnapshot(state: SimulationState): EconomySnapsho
     healthProductionFactor,
   );
   const nutrientUse = energyProduction / ECONOMY_CONFIG.baseEnergyYield;
-  const nutrientStockRate = safeAdd(nutrientIncome, -nutrientUse);
-  const energyStockRate = safeAdd(energyProduction, -upkeep);
-  const intendedGrowthInvestmentRate = safeProduct(biomassProduction, 0.35 + growthShare);
-  const biomassStockRate = safeAdd(biomassProduction, -intendedGrowthInvestmentRate);
+  const nutrientStockRate = Math.max(0, safeAdd(nutrientIncome, -nutrientUse));
+  const energyStockRate = Math.max(0, safeAdd(energyProduction, -upkeep));
+  const growthInvestmentShare = Math.min(MAX_GROWTH_INVESTMENT_SHARE, 0.35 + growthShare);
+  const intendedGrowthInvestmentRate = safeProduct(biomassProduction, growthInvestmentShare);
+  const biomassStockRate = Math.max(0, safeAdd(biomassProduction, -intendedGrowthInvestmentRate));
   const lineageExpansionRate =
     state.phase === "lineage"
       ? safeProduct(
@@ -65,6 +77,7 @@ export function calculateEconomySnapshot(state: SimulationState): EconomySnapsho
           0.65 + growthShare,
           upgradeEffect(state.upgradeLevels.transporters, 0.12),
           upgradeEffect(state.upgradeLevels.glycolysis, 0.16),
+          immuneResilience,
         )
       : 0;
   const effectiveImmunePressure = Math.max(
@@ -190,21 +203,25 @@ export function harvestNutrientBurst(state: SimulationState): SimulationState {
   }
   const uptakeShare = state.allocation.uptake / 100;
   const growthShare = state.allocation.growth / 100;
+  const immuneResilience = immuneResilienceMultiplier(state.upgradeLevels.immune_cloak);
   const nutrientAccess = safeProduct(
     0.55 + uptakeShare * 1.125,
     upgradeEffect(state.upgradeLevels.transporters, 0.36),
     1 + Math.log1p(state.upgradeLevels.angiogenesis) * 0.2,
+    immuneResilience,
   );
   const nutrientGain = safeProduct(8, nutrientAccess);
   const energyGain = safeProduct(
     nutrientGain,
     0.55,
     upgradeEffect(state.upgradeLevels.glycolysis, 0.3),
+    immuneResilience,
   );
   // The default is 0.995 biomass per click, preserving the intended clicker cadence.
   const biomassGain = safeProduct(
     0.75 + growthShare * 0.7,
     1 + Math.log1p(state.upgradeLevels.glycolysis) * 0.18,
+    immuneResilience,
   );
   return {
     ...state,
@@ -224,6 +241,9 @@ export function advanceSimulation(state: SimulationState, deltaSeconds: number):
     return state;
   }
 
+  // Resource deltas use the snapshot visible to the player before this tick.
+  // This makes the published per-second rates the exact passive stock deltas.
+  const economy = calculateEconomySnapshot(state);
   const elapsedSeconds = safeAdd(state.elapsedSeconds, deltaSeconds);
   const bloodFlow = safeAdd(
     1,
@@ -231,16 +251,11 @@ export function advanceSimulation(state: SimulationState, deltaSeconds: number):
     Math.log1p(state.upgradeLevels.angiogenesis) * 0.22,
   );
   const flowingState: SimulationState = { ...state, elapsedSeconds, bloodFlow };
-  const economy = calculateEconomySnapshot(flowingState);
-  const availableBiomass = safeAdd(
-    state.resources.biomass,
-    safeProduct(economy.biomassProduction, deltaSeconds),
-  );
   const growthInvestment = safeProduct(
     economy.biomassProduction - economy.biomassStockRate,
     deltaSeconds,
   );
-  const investedBiomass = Math.min(availableBiomass, growthInvestment);
+  const investedBiomass = Math.max(0, growthInvestment);
   const cellMass = safeAdd(state.cellMass, investedBiomass);
   const targetPressure = calculateTargetPressure(flowingState, cellMass);
   const immunePressure = safeAdd(
@@ -276,7 +291,10 @@ export function advanceSimulation(state: SimulationState, deltaSeconds: number):
       safeAdd(state.resources.energy, safeProduct(economy.energyStockRate, deltaSeconds)),
       "energy",
     ),
-    biomass: finiteNonNegative(availableBiomass - investedBiomass, "biomass"),
+    biomass: finiteNonNegative(
+      safeAdd(state.resources.biomass, safeProduct(economy.biomassStockRate, deltaSeconds)),
+      "biomass",
+    ),
   };
   const events = thresholdEvents(state, hostControl, cellHealth, immunePressure, phase);
   return {
@@ -358,6 +376,16 @@ function thresholdEvents(
 function upgradeEffect(level: number, perLogLevel: number): number {
   validateUpgradeLevel(level);
   return safeAdd(1, Math.log1p(level) * perLogLevel);
+}
+
+/**
+ * Diminishing resource-capture benefit from immune evasion. It is exactly one
+ * at level zero and asymptotically approaches a modest 1.18 multiplier.
+ */
+function immuneResilienceMultiplier(level: number): number {
+  validateUpgradeLevel(level);
+  const logarithmicProgress = Math.log1p(level);
+  return safeAdd(1, safeProduct(0.18, logarithmicProgress / (1 + logarithmicProgress)));
 }
 
 function validateUpgradeLevel(level: number): void {

@@ -514,6 +514,9 @@ img.tissue-scene {
   box-shadow: 0 0.5rem 1.2rem rgb(3 0 5 / 28%);
   backdrop-filter: blur(0.55rem);
 }
+.survival-hud .lineage-expansion[hidden] {
+  display: none;
+}
 .survival-hud .lineage-expansion {
   border-color: rgb(200 247 90 / 42%);
   background: linear-gradient(135deg, rgb(200 247 90 / 12%), rgb(13 6 23 / 76%));
@@ -915,12 +918,8 @@ body[data-colony-phase="lineage"] #game-message {
     padding: 0.42rem 0.46rem;
     border-radius: 0.5rem;
   }
-  .survival-hud dt {
-  }
   .survival-hud dd {
     font-size: 0.76rem;
-  }
-  .lineage-expansion p {
   }
   .immune-threat {
     font-size: 0.65rem;
