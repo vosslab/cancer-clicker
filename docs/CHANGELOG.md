@@ -38,6 +38,11 @@
 
 ### Behavior or Interface Changes
 
+- Rebuilt the tissue chamber as cartoon body horror: swollen wall cells with visible nuclei, wet
+  membrane highlights, ropey collagen bundles, branching capillaries, red blood cells, mucus
+  threads, and amber nutrient vesicles replace the former violet constellation-like mesh.
+- Removed the star-field treatment from the playfield by eliminating straight node-link artwork,
+  radial orbit rings, cyan particle halos, and screen blending.
 - Reworked nutrient metabolism after strategy simulations exposed a late-game `0/s` nutrient
   rate. A bounded share of captured nutrients now feeds metabolism, while glycolysis improves the
   energy yield from that share; every active and balanced upgrade strategy retains passive nutrient

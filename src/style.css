@@ -238,7 +238,7 @@ h3 {
   z-index: 1;
   inset: 0;
   overflow: hidden;
-  background: #2d1334;
+  background: #42142f;
 }
 #cell-stage {
   position: absolute;
@@ -246,9 +246,9 @@ h3 {
   overflow: hidden;
   isolation: isolate;
   background:
-    radial-gradient(circle at 42% 50%, rgb(255 66 124 / 28%), transparent 26%),
-    radial-gradient(ellipse at 16% 18%, rgb(255 149 180 / 20%), transparent 30%),
-    radial-gradient(ellipse at 86% 88%, rgb(87 245 235 / 16%), transparent 26%), #2d1334;
+    radial-gradient(circle at 42% 50%, rgb(255 88 114 / 24%), transparent 29%),
+    radial-gradient(ellipse at 13% 24%, rgb(255 176 151 / 18%), transparent 34%),
+    radial-gradient(ellipse at 82% 78%, rgb(157 50 78 / 25%), transparent 32%), #42142f;
 }
 #cell-stage::before {
   position: absolute;
@@ -259,18 +259,15 @@ h3 {
   right: calc(var(--shop-width) + 4%);
   content: "";
   pointer-events: none;
-  border: 1px solid rgb(255 210 226 / 18%);
+  border: 0;
   border-radius: 43% 57% 51% 49% / 53% 43% 57% 47%;
   background:
-    repeating-radial-gradient(
-      ellipse at center,
-      transparent 0 3.5rem,
-      rgb(255 214 237 / 5%) 3.6rem 3.7rem
-    ),
-    radial-gradient(ellipse, transparent 31%, rgb(255 113 160 / 12%) 32% 33%, transparent 34%);
+    radial-gradient(ellipse at 9% 46%, rgb(255 159 151 / 8%), transparent 22%),
+    radial-gradient(ellipse at 82% 31%, rgb(103 24 60 / 13%), transparent 27%),
+    linear-gradient(113deg, transparent 34%, rgb(255 188 166 / 5%) 49%, transparent 61%);
   box-shadow:
-    inset 0 0 4rem rgb(255 75 138 / 14%),
-    0 0 3rem rgb(255 60 120 / 14%);
+    inset 2rem 0 4rem rgb(255 75 109 / 9%),
+    inset -2rem 0 4rem rgb(74 12 48 / 12%);
   animation: membrane-breathe 7s ease-in-out infinite;
 }
 img.tissue-scene {
@@ -280,9 +277,9 @@ img.tissue-scene {
   display: block;
   width: 100%;
   height: 100%;
-  opacity: 0.88;
+  opacity: 0.96;
   object-fit: cover;
-  mix-blend-mode: screen;
+  mix-blend-mode: normal;
 }
 .cell-click-target {
   position: absolute;
@@ -473,16 +470,17 @@ img.tissue-scene {
   position: absolute;
   width: 0.65rem;
   aspect-ratio: 1;
-  border-radius: 50%;
-  background: var(--nutrient);
+  border: 1px solid rgb(255 235 184 / 72%);
+  border-radius: 52% 48% 61% 39%;
+  background: #dcae58;
   box-shadow:
-    0 0 0.5rem var(--nutrient),
-    0 0 1.3rem rgb(76 243 226 / 68%);
+    inset 0.14rem 0.1rem 0.15rem rgb(255 250 203 / 70%),
+    0 0 0.45rem rgb(232 161 83 / 42%);
   animation: nutrient-flow 4.5s linear infinite;
 }
 .nutrient-particle:nth-child(2n) {
-  background: var(--metabolic);
-  box-shadow: 0 0 0.5rem var(--metabolic);
+  background: #d26d70;
+  box-shadow: inset 0.12rem 0.08rem 0.14rem rgb(255 200 175 / 65%);
   animation-delay: -1.2s;
 }
 .nutrient-particle:nth-child(3n) {
@@ -768,7 +766,9 @@ body[data-colony-phase="lineage"] #game-message {
   border-color: var(--metabolic);
 }
 #cell-stage[data-immune-alert="true"]::before {
-  border-color: rgb(255 181 91 / 65%);
+  box-shadow:
+    inset 2rem 0 4rem rgb(255 143 92 / 18%),
+    inset -2rem 0 4rem rgb(74 12 48 / 12%);
   animation-duration: 1.6s;
 }
 /* prettier-ignore */
