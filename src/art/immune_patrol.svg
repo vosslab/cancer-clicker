@@ -1,0 +1,96 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 420" role="img" aria-labelledby="immune-title immune-desc">
+  <title id="immune-title">Immune patrol cell</title>
+  <desc id="immune-desc">A stylized blue and cyan macrophage-like immune patrol with lobulated nucleus, translucent membrane, receptor spikes, pseudopods, and amber danger lights.</desc>
+  <defs>
+    <radialGradient id="immune-cytoplasm" cx="33%" cy="24%" r="80%">
+      <stop offset="0" stop-color="#c7ffff" stop-opacity="0.9"/>
+      <stop offset="0.28" stop-color="#54d9ec" stop-opacity="0.84"/>
+      <stop offset="0.67" stop-color="#1c609d" stop-opacity="0.78"/>
+      <stop offset="1" stop-color="#10264e" stop-opacity="0.86"/>
+    </radialGradient>
+    <radialGradient id="immune-nucleus" cx="34%" cy="25%" r="75%">
+      <stop offset="0" stop-color="#d8ffff"/>
+      <stop offset="0.3" stop-color="#71e9f3"/>
+      <stop offset="0.7" stop-color="#2572ba"/>
+      <stop offset="1" stop-color="#142a67"/>
+    </radialGradient>
+    <radialGradient id="immune-danger" cx="32%" cy="25%" r="74%">
+      <stop offset="0" stop-color="#fff7bc"/>
+      <stop offset="0.32" stop-color="#ffd44f"/>
+      <stop offset="0.72" stop-color="#ff743f"/>
+      <stop offset="1" stop-color="#b62b48"/>
+    </radialGradient>
+    <linearGradient id="immune-membrane" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#bfffff"/>
+      <stop offset="0.48" stop-color="#42d8ed"/>
+      <stop offset="1" stop-color="#2772b7"/>
+    </linearGradient>
+    <filter id="immune-glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="7" result="immune-blur"/>
+      <feMerge><feMergeNode in="immune-blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="immune-shadow" x="-35%" y="-35%" width="170%" height="170%">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="7" result="immune-shadow-blur"/>
+      <feOffset dy="7" result="immune-shadow-offset"/>
+      <feMerge><feMergeNode in="immune-shadow-offset"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <symbol id="immune-receptor" viewBox="0 0 26 40">
+      <path d="M13 38V18M13 18C3 17 3 5 13 5C23 5 23 17 13 18Z" fill="none" stroke="#a9ffff" stroke-width="3" stroke-linecap="round"/>
+      <circle cx="13" cy="8" r="3.2" fill="url(#immune-danger)"/>
+    </symbol>
+    <symbol id="immune-granule" viewBox="0 0 28 28">
+      <circle cx="14" cy="14" r="10" fill="url(#immune-danger)" stroke="#fff0a8" stroke-width="1.8"/>
+      <circle cx="11" cy="10" r="3" fill="#fffbd6" fill-opacity="0.8"/>
+    </symbol>
+  </defs>
+
+  <g id="immune-pseudopods" fill="url(#immune-cytoplasm)" stroke="url(#immune-membrane)" stroke-width="6" stroke-linejoin="round">
+    <path d="M128 128C99 101 96 64 120 43C132 78 151 99 177 113Z"/>
+    <path d="M262 102C276 65 316 52 341 72C306 91 286 115 278 143Z"/>
+    <path d="M318 219C360 204 390 226 393 258C358 252 329 261 304 280Z"/>
+    <path d="M262 303C286 342 266 382 232 392C236 352 221 326 198 303Z"/>
+    <path d="M129 295C107 330 63 329 42 299C79 294 103 278 116 252Z"/>
+    <path d="M102 215C61 208 36 174 55 143C82 171 108 181 133 182Z"/>
+  </g>
+
+  <g id="immune-membrane-body" filter="url(#immune-shadow)">
+    <path d="M119 149C129 120 157 105 183 106C204 78 244 80 264 107C298 104 325 128 327 159C355 181 354 219 330 240C342 275 317 308 285 310C268 340 227 349 202 325C169 339 132 320 126 290C94 275 82 237 101 211C83 185 91 161 119 149Z" fill="url(#immune-cytoplasm)" fill-opacity="0.9" stroke="url(#immune-membrane)" stroke-width="8" stroke-linejoin="round"/>
+    <path d="M123 159C148 126 173 126 194 115M274 117C303 137 303 161 325 171M325 237C301 262 310 284 289 303M128 287C113 257 126 237 101 211" fill="none" stroke="#caffff" stroke-opacity="0.46" stroke-width="6" stroke-linecap="round"/>
+    <path d="M139 143C169 114 204 107 236 112" fill="none" stroke="#edffff" stroke-opacity="0.55" stroke-width="5" stroke-linecap="round"/>
+  </g>
+
+  <g id="immune-lobulated-nucleus" filter="url(#immune-glow)">
+    <path d="M158 185C170 153 205 146 224 169C245 145 280 158 281 190C308 205 299 242 273 247C257 275 220 273 207 250C177 263 149 239 158 211C145 204 147 191 158 185Z" fill="url(#immune-nucleus)" stroke="#baffff" stroke-width="5" stroke-linejoin="round"/>
+    <path d="M180 188C195 173 211 179 220 193C233 176 255 179 265 196C255 209 253 223 263 237C245 247 225 242 216 229C201 244 180 236 176 221C188 212 188 200 180 188Z" fill="#174681" fill-opacity="0.72"/>
+    <circle cx="192" cy="188" r="7" fill="#dfffff" fill-opacity="0.75"/>
+    <circle cx="263" cy="201" r="6" fill="#dfffff" fill-opacity="0.72"/>
+    <circle cx="229" cy="246" r="5" fill="#8efff7"/>
+  </g>
+
+  <g id="immune-danger-granules">
+    <use href="#immune-granule" x="127" y="183" width="28" height="28"/>
+    <use href="#immune-granule" x="291" y="184" width="27" height="27"/>
+    <use href="#immune-granule" x="278" y="260" width="29" height="29"/>
+    <use href="#immune-granule" x="158" y="260" width="26" height="26"/>
+    <use href="#immune-granule" x="241" y="125" width="24" height="24"/>
+  </g>
+
+  <g id="immune-receptor-spikes">
+    <use href="#immune-receptor" x="156" y="90" width="26" height="40" transform="rotate(-27 169 110)"/>
+    <use href="#immune-receptor" x="234" y="81" width="26" height="40" transform="rotate(23 247 101)"/>
+    <use href="#immune-receptor" x="306" y="146" width="26" height="40" transform="rotate(66 319 166)"/>
+    <use href="#immune-receptor" x="301" y="237" width="26" height="40" transform="rotate(108 314 257)"/>
+    <use href="#immune-receptor" x="236" y="292" width="26" height="40" transform="rotate(157 249 312)"/>
+    <use href="#immune-receptor" x="146" y="281" width="26" height="40" transform="rotate(-151 159 301)"/>
+    <use href="#immune-receptor" x="91" y="221" width="26" height="40" transform="rotate(-105 104 241)"/>
+    <use href="#immune-receptor" x="92" y="143" width="26" height="40" transform="rotate(-66 105 163)"/>
+  </g>
+
+  <g id="immune-signal-halo" fill="none" filter="url(#immune-glow)">
+    <path d="M48 112C72 79 98 58 136 43" stroke="#68ffff" stroke-opacity="0.32" stroke-width="5" stroke-linecap="round"/>
+    <path d="M314 347C348 333 371 310 384 275" stroke="#ff9058" stroke-opacity="0.44" stroke-width="5" stroke-linecap="round"/>
+    <circle cx="67" cy="102" r="6" fill="#81fff9"/>
+    <circle cx="356" cy="325" r="6" fill="#ffbd58"/>
+    <circle cx="375" cy="281" r="4" fill="#ff7650"/>
+  </g>
+</svg>

@@ -1,0 +1,100 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 480" role="img" aria-labelledby="colony-title colony-desc">
+  <title id="colony-title">Daughter tumor colony</title>
+  <desc id="colony-desc">A stylized cluster of seven smaller tumor daughter cells linked by glowing extracellular matrix filaments and tendrils.</desc>
+  <defs>
+    <radialGradient id="colony-cytoplasm" cx="34%" cy="25%" r="78%">
+      <stop offset="0" stop-color="#ffc0ce"/>
+      <stop offset="0.33" stop-color="#f85d91"/>
+      <stop offset="0.73" stop-color="#a52479"/>
+      <stop offset="1" stop-color="#481151"/>
+    </radialGradient>
+    <radialGradient id="colony-nucleus" cx="35%" cy="28%" r="74%">
+      <stop offset="0" stop-color="#ffd8fa"/>
+      <stop offset="0.35" stop-color="#ca63d1"/>
+      <stop offset="0.78" stop-color="#552078"/>
+      <stop offset="1" stop-color="#1f163e"/>
+    </radialGradient>
+    <linearGradient id="colony-filament" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#3cf4ef" stop-opacity="0.12"/>
+      <stop offset="0.38" stop-color="#77ffff" stop-opacity="0.9"/>
+      <stop offset="0.7" stop-color="#c96bff" stop-opacity="0.55"/>
+      <stop offset="1" stop-color="#f75b95" stop-opacity="0.12"/>
+    </linearGradient>
+    <radialGradient id="colony-node" cx="35%" cy="25%" r="75%">
+      <stop offset="0" stop-color="#f4ffff"/>
+      <stop offset="0.28" stop-color="#7ffff8"/>
+      <stop offset="0.73" stop-color="#20bddd"/>
+      <stop offset="1" stop-color="#2852ae"/>
+    </radialGradient>
+    <filter id="colony-soft-glow" x="-55%" y="-55%" width="210%" height="210%">
+      <feGaussianBlur stdDeviation="7" result="colony-blur"/>
+      <feMerge><feMergeNode in="colony-blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="colony-shadow" x="-35%" y="-35%" width="170%" height="170%">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="5" result="colony-shadow-blur"/>
+      <feOffset dy="6" result="colony-shadow-offset"/>
+      <feMerge><feMergeNode in="colony-shadow-offset"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <symbol id="colony-daughter" viewBox="0 0 100 100">
+      <g filter="url(#colony-shadow)">
+        <path d="M17 34C8 20 20 7 35 14C44 2 62 8 64 21C80 18 91 31 82 43C95 55 84 73 70 72C66 88 47 94 38 80C22 88 8 76 15 62C1 53 4 38 17 34Z" fill="url(#colony-cytoplasm)" stroke="#ffb8ca" stroke-width="3.5" stroke-linejoin="round"/>
+        <path d="M20 36C30 21 43 18 54 20M80 43C68 47 68 59 72 69M38 80C42 65 31 60 18 62" fill="none" stroke="#7d1e67" stroke-opacity="0.68" stroke-width="5" stroke-linecap="round"/>
+        <ellipse cx="50" cy="49" rx="22" ry="19" fill="url(#colony-nucleus)" stroke="#f6a7e8" stroke-width="2.4"/>
+        <circle cx="46" cy="46" r="6" fill="#ffb3ed"/>
+        <circle cx="55" cy="56" r="4" fill="#ed72d9"/>
+        <circle cx="38" cy="62" r="3" fill="#ffafca"/>
+        <circle cx="63" cy="35" r="3.3" fill="#ffbed9"/>
+      </g>
+    </symbol>
+    <symbol id="colony-adhesion" viewBox="0 0 26 26">
+      <circle cx="13" cy="13" r="8" fill="url(#colony-node)"/>
+      <circle cx="10" cy="10" r="3" fill="#ecffff" fill-opacity="0.8"/>
+    </symbol>
+  </defs>
+
+  <g id="colony-matrix" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M95 280C157 210 196 228 255 177C312 129 367 154 430 109C487 68 550 99 619 69" stroke="#6e42a9" stroke-opacity="0.38" stroke-width="18"/>
+    <path d="M80 289C163 203 206 249 278 177C336 119 396 168 455 108C519 47 574 123 652 59" stroke="url(#colony-filament)" stroke-width="5" filter="url(#colony-soft-glow)"/>
+    <path d="M95 312C172 364 207 315 267 354C332 397 386 345 443 376C510 412 558 343 637 384" stroke="url(#colony-filament)" stroke-width="5" filter="url(#colony-soft-glow)"/>
+    <path d="M156 113C196 154 190 202 239 232M365 69C350 124 387 161 357 215M550 105C507 146 540 206 486 231M208 342C248 311 312 328 343 292M448 291C485 330 548 314 588 349" stroke="#bd6ce3" stroke-opacity="0.58" stroke-width="4"/>
+    <path d="M119 282C173 244 197 262 236 240M284 176C327 193 354 178 385 145M454 108C481 142 511 144 542 116M292 351C331 326 364 329 409 351M454 371C494 343 530 350 573 365" stroke="#91ffff" stroke-opacity="0.58" stroke-width="2.4"/>
+  </g>
+
+  <g id="colony-adhesion-nodes" filter="url(#colony-soft-glow)">
+    <use href="#colony-adhesion" x="142" y="246" width="26" height="26"/>
+    <use href="#colony-adhesion" x="252" y="163" width="26" height="26"/>
+    <use href="#colony-adhesion" x="370" y="126" width="26" height="26"/>
+    <use href="#colony-adhesion" x="449" y="211" width="26" height="26"/>
+    <use href="#colony-adhesion" x="270" y="339" width="26" height="26"/>
+    <use href="#colony-adhesion" x="424" y="347" width="26" height="26"/>
+    <use href="#colony-adhesion" x="560" y="338" width="26" height="26"/>
+  </g>
+
+  <g id="colony-tendrils" fill="none" stroke="#ff86b5" stroke-linecap="round">
+    <path d="M141 272C104 244 89 219 65 222C45 225 39 244 52 257" stroke-width="5"/>
+    <path d="M293 153C285 106 306 73 333 73C354 73 361 92 350 105" stroke-width="5"/>
+    <path d="M460 235C520 227 552 205 572 175C581 161 600 163 605 180" stroke-width="6"/>
+    <path d="M292 358C255 389 220 397 195 386C178 379 177 360 191 351" stroke-width="5"/>
+    <path d="M533 351C587 347 624 362 645 393C653 405 670 402 677 388" stroke-width="5"/>
+  </g>
+
+  <g id="colony-daughter-cells">
+    <use href="#colony-daughter" x="90" y="222" width="116" height="116" transform="rotate(-18 148 280)"/>
+    <use href="#colony-daughter" x="235" y="112" width="132" height="132" transform="rotate(16 301 178)"/>
+    <use href="#colony-daughter" x="355" y="63" width="112" height="112" transform="rotate(-12 411 119)"/>
+    <use href="#colony-daughter" x="412" y="190" width="140" height="140" transform="rotate(22 482 260)"/>
+    <use href="#colony-daughter" x="238" y="292" width="128" height="128" transform="rotate(-16 302 356)"/>
+    <use href="#colony-daughter" x="401" y="313" width="122" height="122" transform="rotate(12 462 374)"/>
+    <use href="#colony-daughter" x="544" y="305" width="108" height="108" transform="rotate(-20 598 359)"/>
+  </g>
+
+  <g id="colony-sparkles" filter="url(#colony-soft-glow)">
+    <circle cx="91" cy="194" r="5" fill="#72fffc"/>
+    <circle cx="197" cy="173" r="4" fill="#c5ffff"/>
+    <circle cx="524" cy="90" r="6" fill="#7ffff8"/>
+    <circle cx="639" cy="199" r="4" fill="#b892ff"/>
+    <circle cx="565" cy="278" r="5" fill="#70fcf2"/>
+    <circle cx="124" cy="378" r="4" fill="#b1ffff"/>
+    <circle cx="370" cy="414" r="5" fill="#ffb3df"/>
+  </g>
+</svg>

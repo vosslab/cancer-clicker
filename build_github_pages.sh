@@ -17,6 +17,7 @@
 #   - Bundles the entry into dist/main.js with esbuild (ESM, es2020,
 #     browser, minified, with sourcemap).
 #   - Copies src/index.html and src/style.css into dist/.
+#   - Copies the authored SVG game art into dist/art/.
 #   - Writes dist/.nojekyll so GitHub Pages serves files starting with _.
 #   - Asserts dist/index.html and dist/main.js exist before exiting.
 #
@@ -73,9 +74,12 @@ npx esbuild "$ENTRY" \
 
 cp src/index.html dist/index.html
 cp src/style.css dist/style.css
+cp -R src/art dist/art
 touch dist/.nojekyll
 
 test -f dist/index.html
 test -f dist/main.js
+test -f dist/art/tissue_scene.svg
+test -f dist/art/tumor_cell.svg
 
 echo "Built dist/ (GitHub Pages-ready)."

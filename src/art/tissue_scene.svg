@@ -1,0 +1,150 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 800" role="img" aria-labelledby="tissue-title tissue-desc">
+  <title id="tissue-title">Stylized bioluminescent tissue cavern</title>
+  <desc id="tissue-desc">A simplified, inferred inside-the-body game environment. Soft tissue folds, capillaries, extracellular mesh, nutrients, and floating cells frame a calm central pocket for a tumor cell.</desc>
+  <defs>
+    <linearGradient id="tissue-bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#080d22"/>
+      <stop offset="0.46" stop-color="#191047"/>
+      <stop offset="1" stop-color="#250735"/>
+    </linearGradient>
+    <radialGradient id="tissue-pocket" cx="50%" cy="50%" r="60%">
+      <stop offset="0" stop-color="#1d3563" stop-opacity="0.78"/>
+      <stop offset="0.45" stop-color="#182659" stop-opacity="0.52"/>
+      <stop offset="1" stop-color="#130d39" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="tissue-fold" x1="0" y1="0" x2="0.85" y2="1">
+      <stop offset="0" stop-color="#ff6b83"/>
+      <stop offset="0.38" stop-color="#ad2d71"/>
+      <stop offset="1" stop-color="#4c145b"/>
+    </linearGradient>
+    <linearGradient id="tissue-fold-deep" x1="0" y1="0" x2="1" y2="0.2">
+      <stop offset="0" stop-color="#3c145b"/>
+      <stop offset="0.5" stop-color="#7d235e"/>
+      <stop offset="1" stop-color="#ec4f72"/>
+    </linearGradient>
+    <linearGradient id="tissue-vessel" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#5a123d"/>
+      <stop offset="0.4" stop-color="#f14c70"/>
+      <stop offset="0.7" stop-color="#8c1b56"/>
+      <stop offset="1" stop-color="#390d42"/>
+    </linearGradient>
+    <radialGradient id="tissue-droplet" cx="35%" cy="25%" r="70%">
+      <stop offset="0" stop-color="#edffff"/>
+      <stop offset="0.26" stop-color="#7ffbf7"/>
+      <stop offset="0.72" stop-color="#1bb9dc"/>
+      <stop offset="1" stop-color="#2868c5"/>
+    </radialGradient>
+    <radialGradient id="tissue-cell" cx="35%" cy="28%" r="70%">
+      <stop offset="0" stop-color="#ffc2d5"/>
+      <stop offset="0.5" stop-color="#f2629b"/>
+      <stop offset="1" stop-color="#8d265e"/>
+    </radialGradient>
+    <filter id="tissue-soft-glow" x="-35%" y="-35%" width="170%" height="170%">
+      <feGaussianBlur stdDeviation="8" result="tissue-blur"/>
+      <feMerge><feMergeNode in="tissue-blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="tissue-nutrient-glow" x="-80%" y="-80%" width="260%" height="260%">
+      <feGaussianBlur stdDeviation="5" result="tissue-glow"/>
+      <feMerge><feMergeNode in="tissue-glow"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <symbol id="tissue-nutrient" viewBox="0 0 32 32">
+      <circle cx="16" cy="16" r="12" fill="url(#tissue-droplet)"/>
+      <circle cx="11" cy="10" r="4" fill="#eaffff" fill-opacity="0.8"/>
+      <circle cx="20" cy="21" r="3" fill="#b1ffff" fill-opacity="0.35"/>
+    </symbol>
+    <symbol id="tissue-floating-cell" viewBox="0 0 70 70">
+      <path d="M10 30C5 16 20 6 31 12C40 3 57 12 55 24C68 31 60 49 48 48C43 63 24 61 23 49C10 50 3 40 10 30Z" fill="url(#tissue-cell)" stroke="#ff9bc2" stroke-width="2"/>
+      <ellipse cx="35" cy="34" rx="14" ry="12" fill="#68236a"/>
+      <ellipse cx="30" cy="29" rx="5" ry="4" fill="#d886c9" fill-opacity="0.7"/>
+      <circle cx="47" cy="29" r="3" fill="#ffb2cf"/>
+      <circle cx="24" cy="45" r="2.5" fill="#f9a1cc"/>
+    </symbol>
+    <symbol id="tissue-mesh-node" viewBox="0 0 24 24">
+      <circle cx="12" cy="12" r="3.2" fill="#a76ce9"/>
+      <circle cx="11" cy="10" r="1.2" fill="#f5e6ff"/>
+    </symbol>
+  </defs>
+
+  <g id="tissue-background">
+    <rect width="1280" height="800" fill="url(#tissue-bg)"/>
+    <ellipse cx="640" cy="405" rx="465" ry="315" fill="url(#tissue-pocket)"/>
+    <path d="M163 610C290 480 300 270 480 160C620 75 866 106 1080 231" fill="none" stroke="#6d3daa" stroke-opacity="0.18" stroke-width="90" filter="url(#tissue-soft-glow)"/>
+  </g>
+
+  <g id="tissue-distant-folds" opacity="0.78">
+    <path d="M0 95C105 45 170 142 278 99C397 51 420 16 534 50C652 84 730 22 842 58C960 99 1024 45 1280 78V0H0Z" fill="url(#tissue-fold-deep)"/>
+    <path d="M0 734C106 665 198 744 318 672C434 604 526 699 620 729C738 767 842 623 950 665C1073 712 1186 634 1280 658V800H0Z" fill="url(#tissue-fold-deep)"/>
+    <path d="M142 149C236 208 342 183 424 120M802 132C895 205 1000 206 1118 130M127 660C242 581 355 609 452 678M833 677C936 581 1075 598 1206 684" fill="none" stroke="#ff809b" stroke-opacity="0.34" stroke-width="9"/>
+  </g>
+
+  <g id="tissue-capillary-network" fill="none" stroke-linecap="round">
+    <path d="M-25 266C111 219 168 316 258 270C354 221 356 132 468 143C539 151 569 222 630 223" stroke="url(#tissue-vessel)" stroke-width="31"/>
+    <path d="M151 255C198 199 196 137 258 108M264 271C321 312 333 380 398 397M439 150C490 101 536 93 586 109" stroke="#d9456d" stroke-width="12"/>
+    <path d="M1299 296C1163 226 1080 341 989 281C900 224 921 136 807 162C731 178 708 245 650 249" stroke="url(#tissue-vessel)" stroke-width="34"/>
+    <path d="M1117 271C1063 214 1078 148 1007 113M998 282C932 330 938 389 872 410M844 170C791 123 748 118 694 136" stroke="#d9456d" stroke-width="12"/>
+    <path d="M-20 488C95 457 153 536 252 499C356 460 354 555 448 571M1300 502C1171 454 1100 540 1012 495C935 455 909 554 824 565" stroke="#7c255a" stroke-width="25"/>
+    <path d="M-12 264C116 221 169 305 255 267M1292 294C1158 232 1085 329 1009 279" stroke="#ff9c9d" stroke-opacity="0.52" stroke-width="5"/>
+    <path d="M31 482C114 458 166 525 247 493M1250 498C1170 466 1108 524 1022 490" stroke="#f68b91" stroke-opacity="0.38" stroke-width="4"/>
+  </g>
+
+  <g id="tissue-vessel-openings">
+    <g transform="translate(95 271) rotate(-23)">
+      <ellipse rx="45" ry="34" fill="#3b0a35" stroke="#ed5878" stroke-width="10"/>
+      <ellipse rx="29" ry="20" fill="#100c2b"/>
+      <ellipse cx="-9" cy="-7" rx="13" ry="8" fill="#ff6385" fill-opacity="0.45"/>
+    </g>
+    <g transform="translate(1186 300) rotate(28)">
+      <ellipse rx="48" ry="35" fill="#3b0a35" stroke="#ed5878" stroke-width="10"/>
+      <ellipse rx="30" ry="21" fill="#100c2b"/>
+      <ellipse cx="-10" cy="-7" rx="13" ry="8" fill="#ff6385" fill-opacity="0.45"/>
+    </g>
+  </g>
+
+  <g id="tissue-extracellular-mesh" fill="none" stroke="#ba8cff" stroke-linecap="round" stroke-opacity="0.3">
+    <path d="M238 171L315 225L286 326L390 367L430 467L353 548L431 633M315 225L400 200L465 265L549 231M390 367L486 380L547 453L637 427M353 548L472 548L542 621L649 580M841 198L776 255L815 338L721 382M972 203L890 259L928 348L832 407M1043 336L950 393L973 478L874 526M1098 550L980 535L918 626L829 591" stroke-width="3"/>
+    <path d="M238 171L286 326M400 200L390 367M465 265L486 380M549 231L547 453M841 198L815 338M972 203L928 348M1043 336L973 478M1098 550L973 478" stroke-width="2"/>
+    <g fill="#b98cff" stroke="none">
+      <use href="#tissue-mesh-node" x="226" y="159" width="24" height="24"/><use href="#tissue-mesh-node" x="303" y="213" width="24" height="24"/><use href="#tissue-mesh-node" x="274" y="314" width="24" height="24"/>
+      <use href="#tissue-mesh-node" x="378" y="355" width="24" height="24"/><use href="#tissue-mesh-node" x="418" y="455" width="24" height="24"/><use href="#tissue-mesh-node" x="341" y="536" width="24" height="24"/>
+      <use href="#tissue-mesh-node" x="829" y="186" width="24" height="24"/><use href="#tissue-mesh-node" x="764" y="243" width="24" height="24"/><use href="#tissue-mesh-node" x="803" y="326" width="24" height="24"/>
+      <use href="#tissue-mesh-node" x="960" y="191" width="24" height="24"/><use href="#tissue-mesh-node" x="878" y="247" width="24" height="24"/><use href="#tissue-mesh-node" x="916" y="336" width="24" height="24"/>
+      <use href="#tissue-mesh-node" x="1031" y="324" width="24" height="24"/><use href="#tissue-mesh-node" x="938" y="381" width="24" height="24"/><use href="#tissue-mesh-node" x="961" y="466" width="24" height="24"/>
+    </g>
+  </g>
+
+  <g id="tissue-nutrients" filter="url(#tissue-nutrient-glow)">
+    <use href="#tissue-nutrient" x="236" y="200" width="31" height="31"/><use href="#tissue-nutrient" x="310" y="421" width="24" height="24"/>
+    <use href="#tissue-nutrient" x="434" y="286" width="33" height="33"/><use href="#tissue-nutrient" x="488" y="587" width="24" height="24"/>
+    <use href="#tissue-nutrient" x="833" y="221" width="29" height="29"/><use href="#tissue-nutrient" x="913" y="456" width="35" height="35"/>
+    <use href="#tissue-nutrient" x="1023" y="516" width="25" height="25"/><use href="#tissue-nutrient" x="1072" y="210" width="21" height="21"/>
+    <circle cx="383" cy="248" r="5" fill="#9dffff"/><circle cx="773" cy="520" r="6" fill="#9dffff"/><circle cx="967" cy="291" r="4" fill="#9dffff"/>
+  </g>
+
+  <g id="tissue-floating-cells">
+    <g transform="translate(286 524) rotate(-17)">
+      <path d="M-27-4C-34-17-19-29-8-23C1-32 18-23 16-11C30-4 22 14 10 13C5 28-14 26-15 14C-28 15-35 6-27-4Z" fill="url(#tissue-cell)" stroke="#ff9bc2" stroke-width="2"/>
+      <ellipse cx="-3" cy="0" rx="12" ry="10" fill="#68236a"/><circle cx="9" cy="-7" r="3" fill="#ffb2cf"/>
+    </g>
+    <g transform="translate(994 186) rotate(22)">
+      <path d="M-24-3C-30-15-17-25-7-20C1-28 16-20 14-9C27-3 20 12 9 11C4 24-12 23-13 12C-25 13-31 5-24-3Z" fill="url(#tissue-cell)" stroke="#ff9bc2" stroke-width="2"/>
+      <ellipse cx="-2" cy="0" rx="10" ry="8" fill="#68236a"/><circle cx="8" cy="-6" r="2.5" fill="#ffb2cf"/>
+    </g>
+    <g transform="translate(1032 623) rotate(-11)">
+      <path d="M-29-4C-36-18-20-30-9-24C1-33 18-24 16-12C30-5 23 14 10 13C5 29-15 27-16 15C-29 16-36 7-29-4Z" fill="url(#tissue-cell)" stroke="#ff9bc2" stroke-width="2"/>
+      <ellipse cx="-3" cy="0" rx="13" ry="11" fill="#68236a"/><circle cx="10" cy="-7" r="3" fill="#ffb2cf"/>
+    </g>
+    <g transform="translate(426 134) rotate(15)" opacity="0.72">
+      <path d="M-18-3C-23-12-12-20-5-16C2-22 13-16 12-8C22-3 17 10 7 9C3 19-10 18-10 9C-20 10-24 3-18-3Z" fill="url(#tissue-cell)" stroke="#ff9bc2" stroke-width="2"/>
+      <ellipse cx="-2" cy="0" rx="8" ry="7" fill="#68236a"/>
+    </g>
+  </g>
+
+  <g id="tissue-foreground-frame">
+    <path d="M0 0C85 55 135 117 119 201C104 281 26 320 0 371Z" fill="url(#tissue-fold)"/>
+    <path d="M0 427C71 467 113 533 93 619C79 675 32 711 0 729Z" fill="url(#tissue-fold)"/>
+    <path d="M1280 0C1201 54 1140 113 1161 200C1178 274 1252 315 1280 353Z" fill="url(#tissue-fold)"/>
+    <path d="M1280 442C1195 471 1152 538 1172 626C1182 678 1244 729 1280 750Z" fill="url(#tissue-fold)"/>
+    <path d="M0 0C106 93 135 145 117 221M0 800C102 710 124 639 93 578M1280 0C1177 80 1151 139 1163 214M1280 800C1174 716 1150 654 1173 589" fill="none" stroke="#ff9da7" stroke-opacity="0.48" stroke-width="8"/>
+    <path d="M37 79C83 132 84 178 54 223M29 555C79 594 67 651 37 696M1247 78C1194 132 1196 179 1227 225M1253 560C1206 605 1212 657 1241 705" fill="none" stroke="#57104f" stroke-width="20" stroke-linecap="round"/>
+  </g>
+</svg>

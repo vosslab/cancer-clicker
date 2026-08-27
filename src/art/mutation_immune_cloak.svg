@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="cloak-title cloak-desc">
+  <title id="cloak-title">Immune cloak mutation layer</title>
+  <desc id="cloak-desc">A translucent blue violet refractive membrane shimmer surrounding a tumor cell.</desc>
+  <defs>
+    <linearGradient id="mutation-cloak-rim" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#b8ffff" stop-opacity="0.2"/>
+      <stop offset="0.25" stop-color="#72eaff" stop-opacity="0.82"/>
+      <stop offset="0.55" stop-color="#9264ff" stop-opacity="0.55"/>
+      <stop offset="0.8" stop-color="#f3a5ff" stop-opacity="0.72"/>
+      <stop offset="1" stop-color="#72eaff" stop-opacity="0.2"/>
+    </linearGradient>
+    <radialGradient id="mutation-cloak-sheen" cx="33%" cy="24%" r="76%">
+      <stop offset="0" stop-color="#d7ffff" stop-opacity="0.37"/>
+      <stop offset="0.42" stop-color="#8f6fff" stop-opacity="0.12"/>
+      <stop offset="1" stop-color="#38dfff" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="mutation-cloak-glow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="5" result="mutation-cloak-blur"/>
+      <feMerge><feMergeNode in="mutation-cloak-blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <path id="mutation-cloak-outline" d="M113 170C125 129 165 104 207 105C240 78 284 79 315 104C358 105 391 136 402 177C430 211 428 256 407 286C415 329 388 372 349 389C327 425 280 441 240 421C197 436 153 413 138 376C99 354 83 309 101 271C77 234 84 193 113 170Z"/>
+  </defs>
+  <g id="mutation-cloak-shell" filter="url(#mutation-cloak-glow)">
+    <use href="#mutation-cloak-outline" fill="url(#mutation-cloak-sheen)" stroke="url(#mutation-cloak-rim)" stroke-width="12" stroke-linejoin="round"/>
+    <use href="#mutation-cloak-outline" fill="none" stroke="#c8ffff" stroke-opacity="0.36" stroke-width="3" stroke-dasharray="18 19" stroke-linecap="round"/>
+  </g>
+  <g id="mutation-cloak-refractions" fill="none" stroke-linecap="round" filter="url(#mutation-cloak-glow)">
+    <path d="M111 188C141 137 191 119 229 120" stroke="#c7ffff" stroke-opacity="0.7" stroke-width="7"/>
+    <path d="M319 113C361 130 388 163 394 201" stroke="#9e87ff" stroke-opacity="0.72" stroke-width="7"/>
+    <path d="M408 280C394 334 365 365 330 381" stroke="#bc9bff" stroke-opacity="0.66" stroke-width="7"/>
+    <path d="M219 421C170 409 140 383 129 348" stroke="#75efff" stroke-opacity="0.64" stroke-width="7"/>
+  </g>
+  <g id="mutation-cloak-shimmer-points" fill="#e5ffff" filter="url(#mutation-cloak-glow)">
+    <circle cx="123" cy="162" r="6"/><circle cx="205" cy="109" r="4"/><circle cx="343" cy="122" r="6"/>
+    <circle cx="407" cy="244" r="5"/><circle cx="369" cy="364" r="6"/><circle cx="264" cy="423" r="4"/>
+    <circle cx="140" cy="369" r="5"/><circle cx="96" cy="264" r="4"/>
+  </g>
+</svg>

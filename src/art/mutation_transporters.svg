@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="transporters-title transporters-desc">
+  <title id="transporters-title">Transporter mutation layer</title>
+  <desc id="transporters-desc">Cyan and magenta membrane transport ports and receptor spikes arranged around a tumor cell.</desc>
+  <defs>
+    <radialGradient id="mutation-transporters-port" cx="32%" cy="28%" r="74%">
+      <stop offset="0" stop-color="#f2ffff"/>
+      <stop offset="0.28" stop-color="#9efff5"/>
+      <stop offset="0.7" stop-color="#13cce1"/>
+      <stop offset="1" stop-color="#6e2bb7"/>
+    </radialGradient>
+    <linearGradient id="mutation-transporters-spike" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#ff9fd8"/>
+      <stop offset="0.48" stop-color="#9c57e5"/>
+      <stop offset="1" stop-color="#29e7e7"/>
+    </linearGradient>
+    <filter id="mutation-transporters-glow" x="-65%" y="-65%" width="230%" height="230%">
+      <feGaussianBlur stdDeviation="7" result="mutation-transporters-blur"/>
+      <feMerge><feMergeNode in="mutation-transporters-blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <symbol id="mutation-transporters-port-symbol" viewBox="0 0 52 52">
+      <circle cx="26" cy="26" r="23" fill="#2b185c" fill-opacity="0.78" stroke="#9dffff" stroke-width="3"/>
+      <circle cx="26" cy="26" r="15" fill="url(#mutation-transporters-port)" stroke="#ecffff" stroke-opacity="0.82" stroke-width="2"/>
+      <path d="M12 26H20M32 26H40M26 12V20M26 32V40" stroke="#ecffff" stroke-width="3" stroke-linecap="round"/>
+      <circle cx="26" cy="26" r="6" fill="#ffe7ff"/>
+    </symbol>
+  </defs>
+  <g id="mutation-transporters-halos" filter="url(#mutation-transporters-glow)" fill="none" stroke="#4bf5f2" stroke-linecap="round">
+    <path d="M119 179C94 156 91 129 112 103" stroke-width="5" stroke-opacity="0.64"/>
+    <path d="M347 130C379 109 409 117 427 140" stroke-width="5" stroke-opacity="0.64"/>
+    <path d="M393 280C423 293 437 320 425 347" stroke-width="5" stroke-opacity="0.64"/>
+    <path d="M181 387C164 414 136 422 110 408" stroke-width="5" stroke-opacity="0.64"/>
+  </g>
+  <g id="mutation-transporters-ports" filter="url(#mutation-transporters-glow)">
+    <use href="#mutation-transporters-port-symbol" x="83" y="119" width="60" height="60" transform="rotate(-31 113 149)"/>
+    <use href="#mutation-transporters-port-symbol" x="350" y="103" width="60" height="60" transform="rotate(32 380 133)"/>
+    <use href="#mutation-transporters-port-symbol" x="376" y="274" width="62" height="62" transform="rotate(87 407 305)"/>
+    <use href="#mutation-transporters-port-symbol" x="104" y="339" width="58" height="58" transform="rotate(-130 133 368)"/>
+  </g>
+  <g id="mutation-transporters-spikes" fill="url(#mutation-transporters-spike)" stroke="#d8ffff" stroke-width="3" stroke-linejoin="round">
+    <path d="M169 128L151 72L190 113Z"/>
+    <path d="M278 103L286 44L311 107Z"/>
+    <path d="M371 176L433 151L392 202Z"/>
+    <path d="M390 250L452 259L395 278Z"/>
+    <path d="M330 368L349 429L307 382Z"/>
+    <path d="M213 383L198 442L179 385Z"/>
+    <path d="M125 294L69 314L117 270Z"/>
+  </g>
+  <g id="mutation-transporters-sparkles" fill="#eaffff" filter="url(#mutation-transporters-glow)">
+    <circle cx="132" cy="107" r="4"/><circle cx="339" cy="84" r="4"/><circle cx="439" cy="208" r="4"/>
+    <circle cx="393" cy="362" r="4"/><circle cx="244" cy="430" r="4"/><circle cx="90" cy="263" r="4"/>
+  </g>
+</svg>

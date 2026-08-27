@@ -1,0 +1,103 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="tumor-title tumor-desc">
+  <title id="tumor-title">Stylized malignant tumor cell</title>
+  <desc id="tumor-desc">A simplified game cell with a lobed coral and magenta membrane, glowing cyan nutrient contact, nucleus, nucleoli, vesicles, receptors, and pseudopods.</desc>
+  <defs>
+    <radialGradient id="tumor-cytoplasm" cx="35%" cy="28%" r="78%">
+      <stop offset="0" stop-color="#ffb1b3"/>
+      <stop offset="0.3" stop-color="#f34e78"/>
+      <stop offset="0.7" stop-color="#b5237a"/>
+      <stop offset="1" stop-color="#67165d"/>
+    </radialGradient>
+    <radialGradient id="tumor-nucleus" cx="34%" cy="25%" r="72%">
+      <stop offset="0" stop-color="#ffbcf0"/>
+      <stop offset="0.38" stop-color="#b44fbd"/>
+      <stop offset="0.78" stop-color="#632a84"/>
+      <stop offset="1" stop-color="#281850"/>
+    </radialGradient>
+    <radialGradient id="tumor-cyan" cx="30%" cy="22%" r="75%">
+      <stop offset="0" stop-color="#f3ffff"/>
+      <stop offset="0.24" stop-color="#9efffa"/>
+      <stop offset="0.64" stop-color="#1ad4e6"/>
+      <stop offset="1" stop-color="#1774ca"/>
+    </radialGradient>
+    <linearGradient id="tumor-membrane" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#ff9ba2"/>
+      <stop offset="0.5" stop-color="#ff3f79"/>
+      <stop offset="1" stop-color="#8e1c6d"/>
+    </linearGradient>
+    <filter id="tumor-cyan-glow" x="-55%" y="-55%" width="210%" height="210%">
+      <feGaussianBlur stdDeviation="9" result="tumor-glow"/>
+      <feMerge><feMergeNode in="tumor-glow"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="tumor-shadow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="8" result="tumor-blur"/>
+      <feOffset dy="8" result="tumor-offset"/>
+      <feMerge><feMergeNode in="tumor-offset"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <symbol id="tumor-receptor" viewBox="0 0 24 36">
+      <path d="M12 35V17M12 17C3 17 3 5 12 5C21 5 21 17 12 17Z" fill="none" stroke="#ffd2da" stroke-width="3" stroke-linecap="round"/>
+      <circle cx="12" cy="7" r="3" fill="#9dffff"/>
+    </symbol>
+    <symbol id="tumor-vesicle" viewBox="0 0 30 30">
+      <circle cx="15" cy="15" r="12" fill="#ff8bb5" fill-opacity="0.7" stroke="#ffd0df" stroke-width="2"/>
+      <circle cx="11" cy="10" r="4" fill="#ffe6f5" fill-opacity="0.75"/>
+      <circle cx="19" cy="19" r="3.5" fill="#9c357e" fill-opacity="0.7"/>
+    </symbol>
+  </defs>
+
+  <g id="tumor-nutrient-contact" filter="url(#tumor-cyan-glow)">
+    <path d="M63 130C93 123 124 138 146 165C163 185 169 211 164 233C125 209 93 186 67 151Z" fill="#23dce8" fill-opacity="0.38"/>
+    <circle cx="78" cy="129" r="30" fill="url(#tumor-cyan)"/>
+    <circle cx="60" cy="92" r="11" fill="url(#tumor-cyan)"/>
+    <circle cx="112" cy="89" r="9" fill="url(#tumor-cyan)"/>
+    <path d="M96 139C121 151 135 171 148 190" fill="none" stroke="#c6ffff" stroke-width="6" stroke-linecap="round"/>
+    <circle cx="68" cy="118" r="10" fill="#f4ffff" fill-opacity="0.72"/>
+  </g>
+
+  <g id="tumor-pseudopods" fill="url(#tumor-membrane)" stroke="#ff9cac" stroke-width="5" stroke-linejoin="round">
+    <path d="M149 111C132 82 139 52 159 38C174 65 195 85 216 102Z"/>
+    <path d="M333 111C360 75 393 77 416 94C386 113 366 134 351 160Z"/>
+    <path d="M393 307C434 304 462 330 466 357C431 348 397 350 367 365Z"/>
+    <path d="M345 397C374 427 366 463 341 480C327 443 307 417 278 402Z"/>
+    <path d="M170 393C151 430 114 444 87 428C121 403 138 376 145 344Z"/>
+    <path d="M119 301C77 302 47 278 48 246C83 265 113 268 145 260Z"/>
+  </g>
+
+  <g id="tumor-cell-body" filter="url(#tumor-shadow)">
+    <path d="M131 164C149 136 181 124 207 120C225 91 262 84 287 109C321 97 351 120 360 148C393 163 404 198 385 225C409 251 400 289 373 305C373 342 342 367 313 366C291 397 253 411 225 389C190 405 155 382 148 350C114 337 101 300 119 272C94 243 100 190 131 164Z" fill="url(#tumor-cytoplasm)" stroke="#ffbdc9" stroke-width="8" stroke-linejoin="round"/>
+    <path d="M139 174C170 135 207 144 226 127M350 153C377 186 370 207 391 226M361 311C337 347 312 338 293 372M151 340C128 311 138 284 115 269" fill="none" stroke="#7e1b61" stroke-opacity="0.65" stroke-width="11" stroke-linecap="round"/>
+    <path d="M147 177C165 151 187 147 205 143M278 116C309 112 332 129 346 151M379 239C389 260 381 281 365 296" fill="none" stroke="#ffd3d7" stroke-opacity="0.55" stroke-width="5" stroke-linecap="round"/>
+  </g>
+
+  <g id="tumor-nucleus-and-organelles">
+    <ellipse cx="254" cy="255" rx="93" ry="82" fill="#4a1a64" fill-opacity="0.55"/>
+    <ellipse cx="254" cy="247" rx="83" ry="73" fill="url(#tumor-nucleus)" stroke="#f3a6e7" stroke-width="5"/>
+    <path d="M192 246C204 205 241 188 283 190C316 192 340 216 341 248" fill="none" stroke="#ffd4fb" stroke-opacity="0.36" stroke-width="7" stroke-linecap="round"/>
+    <circle cx="243" cy="245" r="23" fill="#ff9ee6" stroke="#ffd8fa" stroke-width="4"/>
+    <circle cx="279" cy="274" r="15" fill="#ee65cf" stroke="#ffc6f0" stroke-width="3"/>
+    <circle cx="240" cy="239" r="8" fill="#fff0ff" fill-opacity="0.72"/>
+    <use href="#tumor-vesicle" x="159" y="213" width="31" height="31"/>
+    <use href="#tumor-vesicle" x="313" y="192" width="28" height="28"/>
+    <use href="#tumor-vesicle" x="324" y="294" width="34" height="34"/>
+    <use href="#tumor-vesicle" x="178" y="311" width="29" height="29"/>
+    <use href="#tumor-vesicle" x="282" y="332" width="24" height="24"/>
+    <path d="M171 278C196 270 203 289 224 281M294 163C283 181 307 187 300 205M318 350C309 327 329 321 343 333" fill="none" stroke="#ffb0c6" stroke-opacity="0.8" stroke-width="5" stroke-linecap="round"/>
+  </g>
+
+  <g id="tumor-membrane-receptors">
+    <use href="#tumor-receptor" x="193" y="91" width="24" height="36" transform="rotate(-25 205 109)"/>
+    <use href="#tumor-receptor" x="286" y="93" width="24" height="36" transform="rotate(22 298 111)"/>
+    <use href="#tumor-receptor" x="365" y="173" width="24" height="36" transform="rotate(69 377 191)"/>
+    <use href="#tumor-receptor" x="369" y="263" width="24" height="36" transform="rotate(100 381 281)"/>
+    <use href="#tumor-receptor" x="302" y="359" width="24" height="36" transform="rotate(151 314 377)"/>
+    <use href="#tumor-receptor" x="190" y="354" width="24" height="36" transform="rotate(-151 202 372)"/>
+    <use href="#tumor-receptor" x="114" y="274" width="24" height="36" transform="rotate(-100 126 292)"/>
+    <use href="#tumor-receptor" x="113" y="184" width="24" height="36" transform="rotate(-69 125 202)"/>
+  </g>
+
+  <g id="tumor-cyan-contact-response" filter="url(#tumor-cyan-glow)">
+    <path d="M137 160C157 151 179 160 192 179C173 192 158 209 148 229C132 217 121 201 120 185C119 174 126 165 137 160Z" fill="#35e3e8" fill-opacity="0.82"/>
+    <circle cx="144" cy="176" r="10" fill="#d6ffff"/>
+    <circle cx="163" cy="184" r="6" fill="#7dffff"/>
+  </g>
+</svg>

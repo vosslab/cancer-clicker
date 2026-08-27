@@ -1,0 +1,998 @@
+:root {
+  color-scheme: dark;
+  font-family: "Arial Narrow", "Avenir Next", Avenir, system-ui, sans-serif;
+  --void: #100713;
+  --ink: #fff5ee;
+  --muted: #d7abbf;
+  --blood: #ff4d77;
+  --nutrient: #4cf3e2;
+  --metabolic: #c8f75a;
+  --warning: #ffb55b;
+  --danger: #ff6b6b;
+  --line: rgb(255 204 226 / 24%);
+  --glass: rgb(25 9 31 / 74%);
+  --space: clamp(0.65rem, 1.2vw, 1.1rem);
+  --shop-width: clamp(12.5rem, 25vw, 22rem);
+}
+
+* {
+  box-sizing: border-box;
+}
+html {
+  background: var(--void);
+}
+body {
+  min-width: 20rem;
+  min-height: 100vh;
+  margin: 0;
+  overflow: hidden;
+  color: var(--ink);
+  background:
+    radial-gradient(circle at 50% -12%, rgb(255 59 116 / 24%), transparent 31rem),
+    radial-gradient(circle at 7% 36%, rgb(110 30 103 / 36%), transparent 28rem),
+    radial-gradient(circle at 92% 75%, rgb(17 121 126 / 20%), transparent 28rem), var(--void);
+}
+button {
+  min-block-size: 2.45rem;
+  padding: 0.52rem 0.78rem;
+  cursor: pointer;
+  border: 1px solid rgb(255 255 255 / 18%);
+  border-radius: 0.8rem;
+  color: var(--ink);
+  background: linear-gradient(135deg, #773154, #3f193c);
+  box-shadow:
+    inset 0 1px rgb(255 255 255 / 18%),
+    0 0.4rem 1rem rgb(7 0 7 / 30%);
+  transition:
+    transform 160ms ease,
+    filter 160ms ease,
+    border-color 160ms ease;
+}
+button:hover:not(:disabled) {
+  border-color: var(--nutrient);
+  filter: brightness(1.15);
+  transform: translateY(-2px);
+}
+button:active:not(:disabled) {
+  transform: scale(0.97);
+}
+button:disabled {
+  cursor: not-allowed;
+  color: rgb(255 245 238 / 58%);
+  background: #3a2437;
+  opacity: 0.78;
+}
+button:focus-visible,
+a:focus-visible,
+[tabindex]:focus-visible {
+  outline: 3px solid var(--nutrient);
+  outline-offset: 4px;
+}
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+#app {
+  position: relative;
+  width: min(100vw, calc(100vh * 1.6));
+  height: min(100vh, calc(100vw / 1.6));
+  margin: auto;
+  overflow: hidden;
+}
+.app-shell {
+  isolation: isolate;
+  border: 1px solid rgb(255 192 218 / 32%);
+  background: #190b21;
+  box-shadow:
+    0 0 0 1px rgb(76 243 226 / 7%),
+    0 2rem 5rem rgb(0 0 0 / 45%);
+}
+h1,
+h2,
+h3,
+p {
+  overflow-wrap: anywhere;
+}
+h1,
+h2,
+h3 {
+  margin: 0;
+  font-family: Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.045em;
+  text-transform: uppercase;
+}
+h1 {
+  font-size: clamp(1.15rem, 2.35vw, 2.45rem);
+  line-height: 0.93;
+  text-shadow: 0 0 1rem rgb(255 83 140 / 35%);
+}
+h2 {
+  font-size: clamp(0.95rem, 1.35vw, 1.25rem);
+}
+h3 {
+  font-size: 0.95rem;
+}
+.eyebrow {
+  margin: 0;
+  color: var(--nutrient);
+  font-size: 0.63rem;
+  font-weight: 850;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+/* Top telemetry always stays left of the mutation rail. */
+.resource-header {
+  position: absolute;
+  z-index: 12;
+  top: var(--space);
+  left: var(--space);
+  right: calc(var(--shop-width) + var(--space) * 1.7);
+  display: flex;
+  gap: var(--space);
+  align-items: start;
+  justify-content: space-between;
+  pointer-events: none;
+}
+.resource-header > * {
+  pointer-events: auto;
+}
+.command-bar {
+  display: flex;
+  gap: 0.42rem;
+  align-items: center;
+  justify-content: end;
+}
+.command-bar button {
+  min-inline-size: 4.7rem;
+  min-block-size: 2.25rem;
+  padding: 0.4rem 0.62rem;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+}
+#pause-button {
+  background: linear-gradient(135deg, #315872, #20314d);
+}
+#restart-button {
+  background: linear-gradient(135deg, #7b364d, #4a1d3c);
+}
+
+.resource-grid {
+  position: absolute;
+  z-index: 12;
+  top: clamp(3.9rem, 8.2vw, 6.3rem);
+  left: var(--space);
+  width: min(calc(100% - var(--shop-width) - var(--space) * 2.4), 29rem);
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.45rem;
+  pointer-events: none;
+}
+.resource-card {
+  position: relative;
+  min-width: 0;
+  min-height: 4.85rem;
+  padding: 0.52rem 0.65rem;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 0.85rem;
+  background: linear-gradient(135deg, rgb(255 255 255 / 12%), transparent 40%), var(--glass);
+  box-shadow:
+    0 0.6rem 1.4rem rgb(3 0 5 / 30%),
+    inset 0 1px rgb(255 255 255 / 12%);
+  backdrop-filter: blur(0.6rem);
+}
+.resource-card[data-trend="up"] {
+  border-color: rgb(76 243 226 / 60%);
+}
+.resource-card[data-trend="down"] {
+  border-color: rgb(255 107 107 / 58%);
+}
+.resource-card p {
+  display: block;
+  margin: 0 0 0.22rem;
+  color: var(--muted);
+  font-size: 0.61rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+#nutrients-value,
+#energy-value,
+#biomass-value {
+  display: block;
+  font-family: Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;
+  font-size: clamp(1.35rem, 2.8vw, 2.55rem);
+  line-height: 1;
+  letter-spacing: 0.04em;
+}
+.resource-nutrients output {
+  color: var(--nutrient);
+  text-shadow: 0 0 0.8rem rgb(76 243 226 / 45%);
+}
+.resource-energy output {
+  color: var(--metabolic);
+  text-shadow: 0 0 0.8rem rgb(200 247 90 / 38%);
+}
+.resource-biomass output {
+  color: #ffa2bd;
+  text-shadow: 0 0 0.8rem rgb(255 92 145 / 38%);
+}
+
+.scene-panel {
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+  overflow: hidden;
+  background: #2d1334;
+}
+#cell-stage {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  isolation: isolate;
+  background:
+    radial-gradient(circle at 42% 50%, rgb(255 66 124 / 28%), transparent 26%),
+    radial-gradient(ellipse at 16% 18%, rgb(255 149 180 / 20%), transparent 30%),
+    radial-gradient(ellipse at 86% 88%, rgb(87 245 235 / 16%), transparent 26%), #2d1334;
+}
+#cell-stage::before {
+  position: absolute;
+  z-index: 1;
+  top: 5%;
+  bottom: 5%;
+  left: 5%;
+  right: calc(var(--shop-width) + 4%);
+  content: "";
+  pointer-events: none;
+  border: 1px solid rgb(255 210 226 / 18%);
+  border-radius: 43% 57% 51% 49% / 53% 43% 57% 47%;
+  background:
+    repeating-radial-gradient(
+      ellipse at center,
+      transparent 0 3.5rem,
+      rgb(255 214 237 / 5%) 3.6rem 3.7rem
+    ),
+    radial-gradient(ellipse, transparent 31%, rgb(255 113 160 / 12%) 32% 33%, transparent 34%);
+  box-shadow:
+    inset 0 0 4rem rgb(255 75 138 / 14%),
+    0 0 3rem rgb(255 60 120 / 14%);
+  animation: membrane-breathe 7s ease-in-out infinite;
+}
+img.tissue-scene {
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  opacity: 0.88;
+  object-fit: cover;
+  mix-blend-mode: screen;
+}
+
+.cell-click-target {
+  position: absolute;
+  z-index: 7;
+  top: 53%;
+  left: calc((100% - var(--shop-width)) / 2);
+  display: grid;
+  width: min(42%, calc(100% - var(--shop-width) - 8rem));
+  min-width: 10rem;
+  aspect-ratio: 1;
+  place-items: center;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  color: inherit;
+  background: transparent;
+  box-shadow: none;
+  filter: drop-shadow(0 0 1.5rem rgb(255 70 142 / 30%));
+  transform: translate(-50%, -50%);
+  transition:
+    transform 180ms cubic-bezier(0.16, 1, 0.3, 1),
+    filter 180ms ease;
+}
+.cell-click-target:hover:not(:disabled) {
+  transform: translate(-50%, -50%) scale(1.035);
+  filter: drop-shadow(0 0 2.1rem rgb(255 119 168 / 62%));
+}
+.cell-click-target:active:not(:disabled) {
+  transform: translate(-50%, -50%) scale(0.955);
+}
+.cell-click-target:focus-visible {
+  outline: 3px solid var(--nutrient);
+  outline-offset: 0.65rem;
+}
+.cell-click-target::before,
+.cell-click-target::after {
+  position: absolute;
+  z-index: -1;
+  content: "";
+  border-radius: 50%;
+  pointer-events: none;
+  opacity: 0;
+}
+.cell-click-target::before {
+  inset: 8%;
+  border: 0.25rem solid rgb(76 243 226 / 78%);
+  box-shadow:
+    0 0 1.6rem rgb(76 243 226 / 72%),
+    inset 0 0 1.6rem rgb(255 76 143 / 35%);
+}
+.cell-click-target::after {
+  inset: -4%;
+  border: 0.18rem solid rgb(200 247 90 / 68%);
+  box-shadow: 0 0 2rem rgb(200 247 90 / 45%);
+}
+.cell-click-target.is-clicked::before {
+  animation: nutrient-ripple 600ms ease-out;
+}
+.cell-click-target.is-clicked::after {
+  animation: nutrient-ripple 680ms 65ms ease-out;
+}
+.cell-click-target.is-clicked {
+  animation: harvest-pop 420ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+#tumor-cell-image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  transform: scale(0.9);
+  transform-origin: center;
+  filter: drop-shadow(0 0 0.9rem rgb(255 70 142 / 66%)) saturate(1.16);
+  transition:
+    transform 600ms cubic-bezier(0.16, 1, 0.3, 1),
+    filter 600ms ease;
+  animation: cell-heartbeat 2.6s ease-in-out infinite;
+}
+.mutation-art {
+  position: absolute;
+  inset: 5%;
+  width: 90%;
+  height: 90%;
+  object-fit: contain;
+  pointer-events: none;
+  opacity: calc(var(--mutation-intensity, 0) * 0.92);
+  filter: drop-shadow(0 0 calc(0.35rem + var(--mutation-intensity, 0) * 0.8rem) currentColor);
+  transform: scale(calc(0.92 + var(--mutation-intensity, 0) * 0.12));
+  transition:
+    opacity 420ms ease,
+    transform 420ms ease,
+    filter 420ms ease;
+}
+.mutation-transporters-art {
+  color: var(--nutrient);
+  transform: scale(calc(0.88 + var(--mutation-intensity, 0) * 0.17)) rotate(-8deg);
+}
+.mutation-glycolysis-art {
+  color: var(--metabolic);
+  animation: metabolic-spin 9s linear infinite;
+}
+.mutation-angiogenesis-art {
+  color: #ff8aab;
+  transform: scale(calc(0.94 + var(--mutation-intensity, 0) * 0.13)) rotate(11deg);
+}
+.mutation-immune-cloak-art {
+  color: #d8b4ff;
+  transform: scale(calc(0.98 + var(--mutation-intensity, 0) * 0.16));
+}
+.tumor-mass {
+  position: absolute;
+  z-index: 5;
+  top: 53%;
+  left: calc((100% - var(--shop-width)) / 2);
+  width: min(59%, calc(100% - var(--shop-width) - 3rem));
+  aspect-ratio: 1;
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+}
+.daughter-colony {
+  position: absolute;
+  width: 58%;
+  height: 58%;
+  object-fit: contain;
+  opacity: calc(0.05 + var(--tumor-intensity, 0) * 0.75);
+  filter: saturate(1.2) drop-shadow(0 0 1.1rem rgb(255 62 138 / 42%));
+  transform-origin: center;
+  transition: opacity 600ms ease;
+}
+.colony-one {
+  top: 2%;
+  left: 16%;
+  transform: rotate(-23deg) scale(0.8);
+}
+.colony-two {
+  right: 0;
+  bottom: 8%;
+  transform: rotate(32deg) scale(0.76);
+  opacity: calc(var(--tumor-intensity, 0) * 0.66);
+}
+.colony-three {
+  bottom: -2%;
+  left: 3%;
+  transform: rotate(133deg) scale(0.72);
+  opacity: calc(var(--tumor-intensity, 0) * 0.54);
+}
+.colony-four {
+  top: 23%;
+  right: -3%;
+  transform: rotate(76deg) scale(0.54);
+  opacity: calc(var(--tumor-intensity, 0) * 0.48);
+}
+.immune-patrol-image {
+  position: absolute;
+  z-index: 6;
+  top: 20%;
+  left: 12%;
+  width: min(28%, calc(100% - var(--shop-width) - 4rem));
+  height: auto;
+  pointer-events: none;
+  opacity: var(--immune-visibility, 0);
+  filter: drop-shadow(0 0 0.9rem rgb(255 184 91 / 60%));
+  transform: rotate(-12deg);
+  transition: opacity 600ms ease;
+}
+.click-hint {
+  position: absolute;
+  bottom: 3%;
+  padding: 0.5rem 0.8rem;
+  border: 1px solid rgb(76 243 226 / 47%);
+  border-radius: 999px;
+  color: var(--nutrient);
+  font-size: clamp(0.58rem, 1.2vw, 0.82rem);
+  font-weight: 900;
+  letter-spacing: 0.11em;
+  text-shadow: 0 0 0.7rem rgb(76 243 226 / 68%);
+  background: rgb(13 6 23 / 72%);
+  box-shadow: 0 0.5rem 1.2rem rgb(3 0 5 / 36%);
+  backdrop-filter: blur(0.45rem);
+}
+
+#nutrient-particles {
+  position: absolute;
+  z-index: 4;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+.nutrient-particle {
+  position: absolute;
+  width: 0.65rem;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: var(--nutrient);
+  box-shadow:
+    0 0 0.5rem var(--nutrient),
+    0 0 1.3rem rgb(76 243 226 / 68%);
+  animation: nutrient-flow 4.5s linear infinite;
+}
+.nutrient-particle:nth-child(2n) {
+  background: var(--metabolic);
+  box-shadow: 0 0 0.5rem var(--metabolic);
+  animation-delay: -1.2s;
+}
+.nutrient-particle:nth-child(3n) {
+  width: 0.4rem;
+  animation-duration: 6.2s;
+  animation-delay: -2.7s;
+}
+
+.survival-hud {
+  position: absolute;
+  z-index: 8;
+  left: var(--space);
+  bottom: var(--space);
+  display: grid;
+  width: min(15.5rem, calc(100% - var(--shop-width) - var(--space) * 2.5));
+  gap: 0.45rem;
+  margin: 0;
+}
+.survival-hud > div {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 0.22rem 0.45rem;
+  padding: 0.48rem 0.58rem;
+  border: 1px solid rgb(255 255 255 / 16%);
+  border-radius: 0.7rem;
+  background: rgb(13 6 23 / 76%);
+  box-shadow: 0 0.5rem 1.2rem rgb(3 0 5 / 28%);
+  backdrop-filter: blur(0.55rem);
+}
+.survival-hud .lineage-expansion {
+  border-color: rgb(200 247 90 / 42%);
+  background: linear-gradient(135deg, rgb(200 247 90 / 12%), rgb(13 6 23 / 76%));
+}
+.lineage-expansion p {
+  grid-column: 1 / -1;
+  margin: 0;
+  color: var(--metabolic);
+  font-size: 0.54rem;
+  font-weight: 750;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+.survival-hud dt {
+  color: var(--muted);
+  font-size: 0.57rem;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.survival-hud dd {
+  margin: 0;
+  color: var(--ink);
+  font-size: 0.78rem;
+  font-weight: 900;
+}
+.survival-hud .progress-track {
+  grid-column: 1 / -1;
+  height: 0.42rem;
+}
+.immune-threat {
+  margin-inline-start: 0.22rem;
+  color: var(--warning);
+  font-size: 0.53rem;
+  white-space: nowrap;
+}
+.progress-track {
+  display: block;
+  width: 100%;
+  height: 0.6rem;
+  overflow: hidden;
+  border: 1px solid rgb(255 255 255 / 12%);
+  border-radius: 999px;
+  background: rgb(5 3 12 / 60%);
+  box-shadow: inset 0 0.15rem 0.4rem rgb(0 0 0 / 35%);
+}
+.progress-fill {
+  display: block;
+  width: var(--progress, 0%);
+  height: 100%;
+  min-width: 0.2rem;
+  border-radius: inherit;
+  background: linear-gradient(90deg, var(--nutrient), #b8ffdb);
+  box-shadow: 0 0 0.7rem rgb(76 243 226 / 65%);
+  transition: width 450ms ease;
+}
+#host-control-bar > span {
+  background: linear-gradient(90deg, var(--blood), #ff9e9e);
+  box-shadow: 0 0 0.7rem rgb(255 77 119 / 55%);
+}
+#cell-health-bar > span {
+  background: linear-gradient(90deg, var(--metabolic), var(--nutrient));
+}
+
+#game-message {
+  position: absolute;
+  z-index: 7;
+  bottom: var(--space);
+  left: calc((100% - var(--shop-width)) / 2);
+  width: min(36%, 22rem);
+  margin: 0;
+  padding: 0.6rem 0.8rem;
+  transform: translateX(-50%);
+  border: 1px solid rgb(76 243 226 / 42%);
+  border-radius: 999px;
+  color: var(--nutrient);
+  font-size: clamp(0.64rem, 1.02vw, 0.82rem);
+  text-align: center;
+  background: rgb(14 8 25 / 78%);
+  box-shadow: 0 0 1.4rem rgb(76 243 226 / 20%);
+  backdrop-filter: blur(0.6rem);
+}
+
+.management-console {
+  position: absolute;
+  z-index: 30;
+  top: var(--space);
+  right: var(--space);
+  bottom: var(--space);
+  width: var(--shop-width);
+  padding: 0.72rem;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  border: 1px solid rgb(255 177 207 / 50%);
+  border-radius: 1.05rem;
+  background: linear-gradient(
+    145deg,
+    rgb(121 37 94 / 82%),
+    rgb(21 11 36 / 94%) 44%,
+    rgb(12 15 35 / 94%)
+  );
+  box-shadow:
+    -1rem 0 4rem rgb(0 0 0 / 45%),
+    inset 0 1px rgb(255 255 255 / 17%);
+  backdrop-filter: blur(1rem) saturate(1.2);
+  scrollbar-color: rgb(255 139 186 / 65%) transparent;
+}
+.console-heading {
+  position: sticky;
+  z-index: 2;
+  top: -0.72rem;
+  display: flex;
+  gap: 0.6rem;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.72rem 0 0.62rem;
+  background: linear-gradient(180deg, rgb(64 22 67 / 98%) 78%, transparent);
+}
+.console-heading h2 {
+  color: var(--nutrient);
+}
+.shop-ready {
+  display: grid;
+  flex: 0 0 auto;
+  min-width: 1.95rem;
+  min-height: 1.95rem;
+  place-items: center;
+  border: 1px solid rgb(200 247 90 / 70%);
+  border-radius: 50%;
+  color: #1d1730;
+  font-size: 0.8rem;
+  font-weight: 950;
+  background: var(--metabolic);
+  box-shadow: 0 0 0.8rem rgb(200 247 90 / 55%);
+}
+.shop-intro {
+  margin: 0.1rem 0 0.75rem;
+  color: var(--muted);
+  font-size: 0.74rem;
+  line-height: 1.35;
+}
+.upgrade-market {
+  padding: 0;
+}
+.upgrade-grid {
+  display: grid;
+  gap: 0.5rem;
+}
+.upgrade-card {
+  display: grid;
+  gap: 0.34rem;
+  padding: 0.64rem;
+  border: 1px solid rgb(255 255 255 / 12%);
+  border-radius: 0.72rem;
+  background: linear-gradient(145deg, rgb(200 247 90 / 8%), transparent 44%), rgb(10 5 19 / 42%);
+}
+.upgrade-card h3 {
+  color: var(--nutrient);
+  font-size: 0.84rem;
+}
+.upgrade-card p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.71rem;
+  line-height: 1.32;
+}
+.upgrade-card .signature-tag {
+  color: var(--nutrient);
+  font-size: 0.6rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+.upgrade-meta {
+  font-size: 0.68rem !important;
+}
+[id^="upgrade-"][id$="-level"] {
+  color: var(--nutrient);
+  font-weight: 900;
+}
+[id^="upgrade-"][id$="-cost"] {
+  color: var(--metabolic);
+  font-weight: 900;
+}
+button[data-action="buy-upgrade"] {
+  width: 100%;
+  min-block-size: 2.35rem;
+  color: var(--metabolic);
+  font-size: 0.76rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, #3d5b38, #213a35);
+}
+.model-note {
+  margin: 0.78rem 0 0;
+  color: var(--muted);
+  font-size: 0.66rem;
+  line-height: 1.35;
+}
+
+#start-overlay {
+  position: absolute;
+  z-index: 50;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: var(--space);
+  background:
+    radial-gradient(circle at center, rgb(154 37 107 / 40%), transparent 29rem), rgb(10 4 14 / 88%);
+  backdrop-filter: blur(0.7rem);
+}
+#start-overlay[hidden] {
+  display: none;
+}
+.start-panel {
+  width: min(100%, 37rem);
+  padding: clamp(1.5rem, 5vw, 3.5rem);
+  border: 1px solid rgb(76 243 226 / 35%);
+  border-radius: 2rem 4.5rem;
+  text-align: center;
+  background:
+    radial-gradient(circle at 50% 0%, rgb(255 90 147 / 22%), transparent 58%),
+    linear-gradient(145deg, #4b1c45, #1c1028);
+  box-shadow:
+    0 0 5rem rgb(255 61 135 / 25%),
+    0 1.2rem 3.5rem rgb(3 0 5 / 55%),
+    inset 0 1px rgb(255 255 255 / 14%);
+}
+#start-overlay h1 {
+  margin-block: 0.55rem 1rem;
+  font-size: clamp(2.5rem, 9vw, 5.2rem);
+}
+#start-overlay p {
+  color: var(--muted);
+  line-height: 1.55;
+}
+#start-button {
+  width: min(100%, 20rem);
+  margin-block-start: 1rem;
+  color: #102019;
+  font-weight: 950;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  background: linear-gradient(135deg, #efff98, var(--metabolic));
+  box-shadow:
+    0 0 1.8rem rgb(200 247 90 / 40%),
+    inset 0 1px rgb(255 255 255 / 55%);
+}
+
+body[data-simulation-status="paused"] .scene-panel {
+  filter: saturate(0.58) brightness(0.8);
+}
+body[data-simulation-status="paused"] #pause-button {
+  color: var(--metabolic);
+  border-color: var(--metabolic);
+}
+body[data-colony-phase="lineage"] #cell-stage {
+  box-shadow: inset 0 0 5rem rgb(200 247 90 / 19%);
+}
+body[data-colony-phase="lineage"] #game-message {
+  color: var(--metabolic);
+  border-color: var(--metabolic);
+}
+#cell-stage[data-immune-alert="true"]::before {
+  border-color: rgb(255 181 91 / 65%);
+  animation-duration: 1.6s;
+}
+
+@keyframes membrane-breathe { 0%, 100% { transform: scale(0.98) rotate(-1deg); } 50% { transform: scale(1.025) rotate(1deg); } }
+@keyframes cell-heartbeat { 0%, 100% { transform: scale(0.9); } 12% { transform: scale(0.94); } 24% { transform: scale(0.9); } }
+@keyframes metabolic-spin { to { transform: scale(calc(0.92 + var(--mutation-intensity, 0) * 0.12)) rotate(360deg); } }
+@keyframes nutrient-flow { 0% { opacity: 0; transform: translate(-3rem, 12rem) scale(0.3); } 18%, 78% { opacity: 1; } 100% { opacity: 0; transform: translate(18rem, -12rem) scale(1.3); } }
+@keyframes nutrient-ripple { from { opacity: 0.9; transform: scale(0.58); } to { opacity: 0; transform: scale(1.18); } }
+@keyframes harvest-pop { 0% { transform: translate(-50%, -50%) scale(1); } 45% { transform: translate(-50%, -50%) scale(1.075); } 100% { transform: translate(-50%, -50%) scale(1); } }
+
+@media (max-width: 700px) {
+  :root {
+    --space: 0.42rem;
+  }
+  body {
+    min-width: 0;
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+  /* The game scene stays a true 16:10 chamber; the permanent shop follows it. */
+  #app {
+    display: grid;
+    width: 100%;
+    height: auto;
+    min-height: 100vh;
+    margin: 0;
+    overflow: visible;
+    grid-template-rows: auto auto;
+  }
+  .scene-panel {
+    position: relative;
+    z-index: 1;
+    inset: auto;
+    width: 100%;
+    aspect-ratio: 16 / 10;
+    grid-row: 1;
+  }
+  #start-overlay {
+    inset: 0 0 auto;
+    height: calc(100vw / 1.6);
+    padding: 0.5rem;
+  }
+  .start-panel {
+    width: min(92%, 22rem);
+    padding: 0.8rem 1rem;
+    border-radius: 1.25rem 2.5rem;
+  }
+  #start-overlay .eyebrow,
+  #start-overlay .start-panel > p:not(.eyebrow) {
+    display: none;
+  }
+  #start-overlay h1 {
+    margin: 0 0 0.65rem;
+    font-size: clamp(1.7rem, 9vw, 2.5rem);
+  }
+  #start-button {
+    min-block-size: 2.75rem;
+    margin: 0;
+  }
+  .resource-header {
+    right: var(--space);
+    align-items: flex-start;
+  }
+  .resource-header .eyebrow {
+    display: none;
+  }
+  .resource-header h1 {
+    font-size: clamp(0.95rem, 4.5vw, 1.35rem);
+  }
+  .command-bar {
+    gap: 0.25rem;
+  }
+  .command-bar button {
+    min-inline-size: 0;
+    min-block-size: 2.35rem;
+    padding: 0.35rem 0.45rem;
+    font-size: 0.62rem;
+  }
+  .resource-grid {
+    top: 3.05rem;
+    width: calc(100% - var(--space) * 2);
+    gap: 0.24rem;
+  }
+  .resource-card {
+    min-height: 3rem;
+    padding: 0.36rem 0.4rem;
+    border-radius: 0.58rem;
+  }
+  .resource-card p {
+    margin-bottom: 0.14rem;
+    font-size: 0.48rem;
+    letter-spacing: 0.04em;
+  }
+  #nutrients-value,
+  #energy-value,
+  #biomass-value {
+    font-size: clamp(1rem, 4.7vw, 1.28rem);
+  }
+  #cell-stage::before {
+    inset: 5%;
+  }
+  .cell-click-target {
+    top: 55%;
+    left: 50%;
+    width: min(49%, 12.5rem);
+    min-width: 7.4rem;
+  }
+  .tumor-mass {
+    top: 55%;
+    left: 50%;
+    width: min(69%, 17rem);
+  }
+  .immune-patrol-image {
+    top: 35%;
+    left: 3%;
+    width: min(21%, 6.5rem);
+  }
+  .click-hint {
+    bottom: -4%;
+    padding: 0.32rem 0.48rem;
+    font-size: 0.52rem;
+  }
+  .survival-hud {
+    right: var(--space);
+    display: flex;
+    width: auto;
+    gap: 0.25rem;
+    pointer-events: none;
+  }
+  .survival-hud > div {
+    flex: 1 1 0;
+    gap: 0.12rem 0.25rem;
+    padding: 0.34rem 0.4rem;
+    border-radius: 0.5rem;
+  }
+  .survival-hud dt {
+    font-size: 0.45rem;
+  }
+  .survival-hud dd {
+    font-size: 0.62rem;
+  }
+  .lineage-expansion p {
+    font-size: 0.42rem;
+  }
+  .immune-threat {
+    font-size: 0.42rem;
+  }
+  #game-message {
+    display: none;
+  }
+  .management-console {
+    position: relative;
+    z-index: 2;
+    top: auto;
+    right: auto;
+    bottom: auto;
+    width: 100%;
+    max-height: none;
+    padding: 0.8rem;
+    overflow: visible;
+    border-radius: 0;
+    grid-row: 2;
+  }
+  .console-heading {
+    top: -0.8rem;
+    gap: 0.35rem;
+    padding: 0.8rem 0 0.55rem;
+  }
+  .console-heading .eyebrow {
+    font-size: 0.55rem;
+    letter-spacing: 0.08em;
+  }
+  .console-heading h2 {
+    font-size: 1rem;
+  }
+  .shop-ready {
+    min-width: 2rem;
+    min-height: 2rem;
+    font-size: 0.76rem;
+  }
+  .shop-intro {
+    margin-bottom: 0.7rem;
+    font-size: 0.76rem;
+  }
+  .upgrade-grid {
+    gap: 0.55rem;
+  }
+  .upgrade-card {
+    gap: 0.34rem;
+    padding: 0.72rem;
+    border-radius: 0.72rem;
+  }
+  .upgrade-card h3 {
+    font-size: 0.92rem;
+  }
+  .upgrade-card p,
+  .upgrade-meta {
+    font-size: 0.76rem !important;
+  }
+  .upgrade-card .signature-tag {
+    font-size: 0.62rem;
+  }
+  button[data-action="buy-upgrade"] {
+    min-block-size: 2.75rem;
+    padding: 0.5rem 0.7rem;
+    font-size: 0.78rem;
+  }
+  .model-note {
+    font-size: 0.68rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

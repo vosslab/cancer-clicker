@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="glycolysis-title glycolysis-desc">
+  <title id="glycolysis-title">Glycolysis mutation layer</title>
+  <desc id="glycolysis-desc">Lime and amber metabolic vesicles with luminous energy streams inside a tumor cell.</desc>
+  <defs>
+    <radialGradient id="mutation-glycolysis-vesicle" cx="31%" cy="26%" r="76%">
+      <stop offset="0" stop-color="#ffffe3"/>
+      <stop offset="0.26" stop-color="#e9ff6c"/>
+      <stop offset="0.63" stop-color="#b8df21"/>
+      <stop offset="1" stop-color="#e87529"/>
+    </radialGradient>
+    <linearGradient id="mutation-glycolysis-flow" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#f5ff9c" stop-opacity="0.08"/>
+      <stop offset="0.42" stop-color="#deff45" stop-opacity="0.95"/>
+      <stop offset="1" stop-color="#ffb42d" stop-opacity="0.2"/>
+    </linearGradient>
+    <filter id="mutation-glycolysis-glow" x="-55%" y="-55%" width="210%" height="210%">
+      <feGaussianBlur stdDeviation="6" result="mutation-glycolysis-blur"/>
+      <feMerge><feMergeNode in="mutation-glycolysis-blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <symbol id="mutation-glycolysis-vesicle-symbol" viewBox="0 0 58 58">
+      <circle cx="29" cy="29" r="25" fill="url(#mutation-glycolysis-vesicle)" stroke="#ffffcf" stroke-width="3"/>
+      <circle cx="21" cy="20" r="7" fill="#fffede" fill-opacity="0.86"/>
+      <path d="M18 34C24 25 35 27 40 35" fill="none" stroke="#8d5722" stroke-opacity="0.72" stroke-width="4" stroke-linecap="round"/>
+      <circle cx="38" cy="18" r="4" fill="#ffcd39"/>
+    </symbol>
+  </defs>
+  <g id="mutation-glycolysis-energy-streams" filter="url(#mutation-glycolysis-glow)" fill="none" stroke="url(#mutation-glycolysis-flow)" stroke-linecap="round">
+    <path d="M154 228C191 203 208 226 239 238C267 249 290 221 333 196" stroke-width="12"/>
+    <path d="M177 318C215 333 237 311 261 291C284 271 312 278 348 310" stroke-width="10"/>
+    <path d="M215 158C235 179 263 185 296 168" stroke-width="7"/>
+  </g>
+  <g id="mutation-glycolysis-vesicles" filter="url(#mutation-glycolysis-glow)">
+    <use href="#mutation-glycolysis-vesicle-symbol" x="129" y="194" width="61" height="61"/>
+    <use href="#mutation-glycolysis-vesicle-symbol" x="306" y="162" width="63" height="63"/>
+    <use href="#mutation-glycolysis-vesicle-symbol" x="318" y="281" width="62" height="62"/>
+    <use href="#mutation-glycolysis-vesicle-symbol" x="183" y="299" width="58" height="58"/>
+  </g>
+  <g id="mutation-glycolysis-atp-bursts" filter="url(#mutation-glycolysis-glow)" fill="#f7ff8a" stroke="#ffbb35" stroke-width="2">
+    <path d="M249 155l8 18 19 7-19 7-8 19-8-19-19-7 19-7Z"/>
+    <path d="M286 329l6 13 14 6-14 5-6 14-5-14-14-5 14-6Z"/>
+    <circle cx="202" cy="185" r="6"/><circle cx="292" cy="230" r="5"/><circle cx="160" cy="289" r="5"/>
+  </g>
+</svg>

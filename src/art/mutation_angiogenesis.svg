@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="angiogenesis-title angiogenesis-desc">
+  <title id="angiogenesis-title">Angiogenesis mutation layer</title>
+  <desc id="angiogenesis-desc">Coral capillary tendrils and budding vessel tips converge on a tumor cell membrane.</desc>
+  <defs>
+    <linearGradient id="mutation-angiogenesis-vessel" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#6f173d"/>
+      <stop offset="0.46" stop-color="#e63861"/>
+      <stop offset="0.72" stop-color="#ff9a7b"/>
+      <stop offset="1" stop-color="#7a1c55"/>
+    </linearGradient>
+    <radialGradient id="mutation-angiogenesis-bud" cx="32%" cy="28%" r="72%">
+      <stop offset="0" stop-color="#ffd9c4"/>
+      <stop offset="0.35" stop-color="#ff8d78"/>
+      <stop offset="0.75" stop-color="#cf2356"/>
+      <stop offset="1" stop-color="#69173e"/>
+    </radialGradient>
+    <filter id="mutation-angiogenesis-glow" x="-35%" y="-35%" width="170%" height="170%">
+      <feGaussianBlur stdDeviation="4" result="mutation-angiogenesis-blur"/>
+      <feMerge><feMergeNode in="mutation-angiogenesis-blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+  <g id="mutation-angiogenesis-tendrils" fill="none" stroke="url(#mutation-angiogenesis-vessel)" stroke-linecap="round" stroke-linejoin="round" filter="url(#mutation-angiogenesis-glow)">
+    <path d="M40 186C74 166 92 178 119 195C136 206 144 200 162 187" stroke-width="13"/>
+    <path d="M47 179C77 139 103 142 121 171M82 215C92 237 116 244 134 228" stroke-width="6"/>
+    <path d="M365 119C383 145 391 165 369 190C356 205 356 219 370 238" stroke-width="14"/>
+    <path d="M383 144C424 151 441 178 432 211M382 163C401 194 410 211 446 226" stroke-width="6"/>
+    <path d="M356 347C384 345 408 364 415 390C419 406 437 419 457 421" stroke-width="13"/>
+    <path d="M397 366C380 397 382 419 404 447M417 389C440 383 461 395 474 411" stroke-width="6"/>
+    <path d="M124 350C104 368 95 393 113 417C126 435 118 451 103 466" stroke-width="12"/>
+    <path d="M107 382C71 382 54 402 44 429M114 411C142 424 151 444 149 468" stroke-width="6"/>
+  </g>
+  <g id="mutation-angiogenesis-buds" filter="url(#mutation-angiogenesis-glow)" fill="url(#mutation-angiogenesis-bud)" stroke="#ffd4cb" stroke-width="2">
+    <circle cx="39" cy="187" r="14"/><circle cx="443" cy="226" r="11"/><circle cx="457" cy="421" r="13"/><circle cx="103" cy="466" r="12"/>
+    <circle cx="432" cy="211" r="9"/><circle cx="44" cy="429" r="9"/>
+  </g>
+  <g id="mutation-angiogenesis-contact-rings" fill="none" stroke="#ffb09a" stroke-width="4" stroke-opacity="0.83">
+    <circle cx="156" cy="190" r="12"/><circle cx="370" cy="236" r="12"/><circle cx="356" cy="347" r="12"/><circle cx="124" cy="350" r="12"/>
+  </g>
+</svg>

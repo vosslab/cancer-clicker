@@ -1,0 +1,213 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#170d20" />
+    <title>Cancer Clicker</title>
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <main id="app" class="app-shell" aria-describedby="model-note">
+      <section id="start-overlay" class="start-overlay" aria-labelledby="start-title">
+        <div class="start-panel">
+          <p class="eyebrow">ORGANIC CLICKER</p>
+          <h1 id="start-title">Cancer Clicker</h1>
+          <p>
+            Click your cell to harvest tissue resources. Buy mutations, grow the colony, and survive
+            the host response.
+          </p>
+          <button id="start-button" type="button">Awaken cell</button>
+        </div>
+      </section>
+      <header class="resource-header">
+        <div class="game-title">
+          <p class="eyebrow">CANCER CLICKER</p>
+          <h1>Cancer Clicker</h1>
+        </div>
+        <nav class="command-bar" aria-label="Simulation controls">
+          <button id="pause-button" type="button">Pause</button
+          ><button id="restart-button" type="button">Restart</button>
+        </nav>
+      </header>
+      <section class="resource-grid" aria-labelledby="resources-title">
+        <h2 id="resources-title" class="sr-only">Cell resources</h2>
+        <article class="resource-card resource-nutrients">
+          <p>Nutrients</p>
+          <output id="nutrients-value" aria-label="Nutrients">42</output>
+        </article>
+        <article class="resource-card resource-energy">
+          <p>Energy</p>
+          <output id="energy-value" aria-label="Energy">48</output>
+        </article>
+        <article class="resource-card resource-biomass">
+          <p>Biomass</p>
+          <output id="biomass-value" aria-label="Biomass">20</output>
+        </article>
+      </section>
+      <section class="scene-panel" aria-labelledby="stage-title">
+        <h2 id="stage-title" class="sr-only">Living tissue playfield</h2>
+        <div id="cell-stage" class="cell-stage" aria-label="Animated tissue scene">
+          <img class="tissue-scene" src="./art/tissue_scene.svg" alt="" aria-hidden="true" />
+          <div id="nutrient-particles" class="nutrient-particles" aria-hidden="true"></div>
+          <div id="tumor-mass" class="tumor-mass" aria-hidden="true">
+            <img class="daughter-colony colony-one" src="./art/daughter_colony.svg" alt="" />
+            <img class="daughter-colony colony-two" src="./art/daughter_colony.svg" alt="" />
+            <img class="daughter-colony colony-three" src="./art/daughter_colony.svg" alt="" />
+            <img class="daughter-colony colony-four" src="./art/daughter_colony.svg" alt="" />
+          </div>
+          <img
+            id="immune-patrol-image"
+            class="immune-patrol-image"
+            src="./art/immune_patrol.svg"
+            alt=""
+            aria-hidden="true"
+          />
+          <button
+            id="cell-click-target"
+            class="cell-click-target"
+            type="button"
+            aria-label="Harvest nutrients with the tumor cell"
+          >
+            <img id="tumor-cell-image" class="tumor-cell-image" src="./art/tumor_cell.svg" alt="" />
+            <img
+              id="mutation-transporters-art"
+              class="mutation-art mutation-transporters-art"
+              src="./art/mutation_transporters.svg"
+              alt=""
+            />
+            <img
+              id="mutation-glycolysis-art"
+              class="mutation-art mutation-glycolysis-art"
+              src="./art/mutation_glycolysis.svg"
+              alt=""
+            />
+            <img
+              id="mutation-angiogenesis-art"
+              class="mutation-art mutation-angiogenesis-art"
+              src="./art/mutation_angiogenesis.svg"
+              alt=""
+            />
+            <img
+              id="mutation-immune-cloak-art"
+              class="mutation-art mutation-immune-cloak-art"
+              src="./art/mutation_immune_cloak.svg"
+              alt=""
+            /><span class="click-hint">CLICK TO HARVEST</span>
+          </button>
+          <p id="game-message" role="status" aria-live="polite">
+            The transformed cell is ready to wake.
+          </p>
+          <dl class="survival-hud" aria-label="Colony status">
+            <div>
+              <dt>Host control</dt>
+              <dd><output id="host-control-value">1%</output></dd>
+              <div
+                id="host-control-bar"
+                class="progress-track"
+                role="progressbar"
+                aria-label="Host control"
+                aria-valuemin="0"
+                aria-valuemax="100"
+                aria-valuenow="1"
+              >
+                <span class="progress-fill"></span>
+              </div>
+            </div>
+            <div>
+              <dt>
+                Cell health <span id="immune-pressure-value" class="immune-threat">Threat 8</span>
+              </dt>
+              <dd><output id="cell-health-value">100%</output></dd>
+              <div
+                id="cell-health-bar"
+                class="progress-track"
+                role="progressbar"
+                aria-label="Cell health"
+                aria-valuemin="0"
+                aria-valuemax="100"
+                aria-valuenow="100"
+              >
+                <span class="progress-fill"></span>
+              </div>
+            </div>
+            <div id="lineage-expansion" class="lineage-expansion" hidden>
+              <dt>Lineage expansion</dt>
+              <dd><output id="lineage-expansion-value">0</output></dd>
+              <p>Beyond host control</p>
+            </div>
+          </dl>
+        </div>
+      </section>
+      <aside
+        id="management-console"
+        class="management-console"
+        aria-label="Mutation shop with available mutations and ready-to-buy count"
+      >
+        <div class="console-heading">
+          <div>
+            <p class="eyebrow">SPEND RESOURCES</p>
+            <h2>Mutation shop</h2>
+          </div>
+          <span
+            id="mutation-shop-ready"
+            class="shop-ready"
+            role="status"
+            aria-label="0 mutations ready to buy"
+            >0</span
+          >
+        </div>
+        <p class="shop-intro">
+          Mutations consume different resource pools, compound your clicks, and help the colony
+          survive.
+        </p>
+        <section class="upgrade-market" aria-labelledby="upgrades-title">
+          <h3 id="upgrades-title" class="sr-only">Available mutations</h3>
+          <div class="upgrade-grid">
+            <article class="upgrade-card">
+              <h3>Transporter swarm</h3>
+              <p class="signature-tag">Surface signature: receptor chevrons</p>
+              <p>Click for more nutrients.</p>
+              <p class="upgrade-meta">Level <span id="upgrade-transporters-level">0</span></p>
+              <button type="button" data-action="buy-upgrade" data-upgrade-id="transporters">
+                Mutate <span id="upgrade-transporters-cost">14 biomass</span>
+              </button>
+            </article>
+            <article class="upgrade-card">
+              <h3>Glycolysis burst</h3>
+              <p class="signature-tag">Surface signature: metabolic rings</p>
+              <p>Turn each harvest into more energy.</p>
+              <p class="upgrade-meta">Level <span id="upgrade-glycolysis-level">0</span></p>
+              <button type="button" data-action="buy-upgrade" data-upgrade-id="glycolysis">
+                Mutate <span id="upgrade-glycolysis-cost">55 nutrients</span>
+              </button>
+            </article>
+            <article class="upgrade-card">
+              <h3>Angiogenesis signal</h3>
+              <p class="signature-tag">Surface signature: vessel forks</p>
+              <p>Call in a richer blood supply.</p>
+              <p class="upgrade-meta">Level <span id="upgrade-angiogenesis-level">0</span></p>
+              <button type="button" data-action="buy-upgrade" data-upgrade-id="angiogenesis">
+                Mutate <span id="upgrade-angiogenesis-cost">80 energy</span>
+              </button>
+            </article>
+            <article class="upgrade-card">
+              <h3>Immune cloak</h3>
+              <p class="signature-tag">Surface signature: glycan shield</p>
+              <p>Keep host defenses off your cell.</p>
+              <p class="upgrade-meta">Level <span id="upgrade-immune_cloak-level">0</span></p>
+              <button type="button" data-action="buy-upgrade" data-upgrade-id="immune_cloak">
+                Mutate <span id="upgrade-immune_cloak-cost">65 energy + 35 biomass</span>
+              </button>
+            </article>
+          </div>
+        </section>
+        <p id="model-note" class="model-note">
+          HeLa-inspired endless lineage honors Henrietta Lacks. Stylized strategy model, not medical
+          guidance or a clinical simulation.
+        </p>
+      </aside>
+    </main>
+    <script type="module" src="./main.js"></script>
+  </body>
+</html>
