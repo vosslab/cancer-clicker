@@ -30,8 +30,10 @@
   [src/constants.ts](/src/constants.ts), [src/brands.ts](/src/brands.ts), and
   [src/types/simulation.ts](/src/types/simulation.ts) form the deterministic economy model.
 - [src/ui_rendering.ts](/src/ui_rendering.ts) owns DOM updates derived from simulation state.
-- [src/style.css](/src/style.css) owns the visual layout and responsive behavior.
-- [src/art/](/src/art/) holds authored SVG assets copied unchanged to `dist/art/` during builds.
+- [src/style.css](/src/style.css) owns the visual layout and responsive behavior;
+  `src/effects.css` owns milestone motion and persistent mutation feedback.
+- [src/art/](/src/art/) holds authored SVG assets, including the mutation signal burst, copied
+  unchanged to `dist/art/` during builds.
 
 ## Test layout
 
@@ -73,8 +75,8 @@
   [src/constants.ts](/src/constants.ts).
 - Put semantic controls and art references in [src/index.html](/src/index.html), and state-to-DOM
   updates in [src/ui_rendering.ts](/src/ui_rendering.ts).
-- Put game artwork in [src/art/](/src/art/) as editable SVG and visual styling in
-  [src/style.css](/src/style.css).
+- Put game artwork in [src/art/](/src/art/) as editable SVG, structural styling in
+  [src/style.css](/src/style.css), and focused state feedback in `src/effects.css`.
 - Put deterministic game assertions in [tests/test_simulation.mjs](/tests/test_simulation.mjs) and
   visible interaction checks in [tests/playwright/](/tests/playwright/).
 - Put durable reference documentation under [docs/](/docs/) using SCREAMING_SNAKE_CASE names; the

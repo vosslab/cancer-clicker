@@ -35,7 +35,8 @@ respects Henrietta Lacks and does not use her story as a gameplay reward.
 ## Mutation shop
 
 Each mutation compounds the clicker economy and visibly equips or intensifies a matching surface
-signature. Costs rise without a cap, which keeps the accumulation loop open ended.
+signature. A successful purchase fires a named organic mutation burst and permanently marks the
+shop card as equipped. Costs rise without a cap, which keeps the accumulation loop open ended.
 
 | Mutation | Resource cost | Visible result |
 | --- | --- | --- |

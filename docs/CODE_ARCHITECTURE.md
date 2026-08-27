@@ -23,10 +23,11 @@ build emits a self-contained `dist/` directory for GitHub Pages.
   [src/brands.ts](/src/brands.ts) validates the branded non-negative tick value.
 - [src/ui_rendering.ts](/src/ui_rendering.ts) converts state and calculated rates into text,
   progress bars, enabled purchases, lineage visibility, mutation intensity, and nutrient particles.
-- [src/style.css](/src/style.css) provides the responsive 16:10 game-frame layout, organic visual
-  treatment, and interaction feedback.
+- [src/style.css](/src/style.css) provides the responsive 16:10 game-frame layout and organic visual
+  treatment. `src/effects.css` owns purchase feedback, equipped-card states, and reduced-motion
+  behavior.
 - [src/art/](/src/art/) contains editable SVG scene art, cell art, daughter colonies, immune patrols,
-  and mutation signature layers.
+  mutation signatures, and the mutation-milestone signal burst.
 
 ## Data flow
 
@@ -40,7 +41,9 @@ build emits a self-contained `dist/` directory for GitHub Pages.
    takeover.
 5. [src/main.ts](/src/main.ts) calculates an `EconomySnapshot` and upgrade costs for the new state.
 6. [src/ui_rendering.ts](/src/ui_rendering.ts) writes the current stocks and actual `/s` rates to the
-   DOM, then sets visual state for the tumor mass and mutation art.
+   DOM, then sets visual state for the tumor mass, mutation art, and permanently equipped cards.
+7. A successful purchase triggers the named milestone overlay in [src/main.ts](/src/main.ts); its
+   editable burst artwork and motion live in `src/art/mutation_burst.svg` and `src/effects.css`.
 
 The simulation has no save service, server API, offline-progress calculation, failure state, or
 pause state. Accumulation continues while the page remains open after awakening.

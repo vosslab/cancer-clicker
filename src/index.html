@@ -6,6 +6,7 @@
     <meta name="theme-color" content="#170d20" />
     <title>Cancer Clicker</title>
     <link rel="stylesheet" href="./style.css" />
+    <link rel="stylesheet" href="./effects.css" />
   </head>
   <body>
     <main id="app" class="app-shell" aria-describedby="model-note">
@@ -103,6 +104,20 @@
               alt=""
             /><span class="click-hint">CLICK TO HARVEST</span>
           </button>
+          <div
+            id="mutation-feedback"
+            class="mutation-feedback"
+            role="status"
+            aria-live="polite"
+            hidden
+          >
+            <img src="./art/mutation_burst.svg" alt="" aria-hidden="true" />
+            <div>
+              <span>Mutation locked</span>
+              <strong id="mutation-feedback-title">Surface evolved</strong>
+              <small id="mutation-feedback-detail">Harvest power compounds</small>
+            </div>
+          </div>
           <p id="game-message" role="status" aria-live="polite">
             The transformed cell is ready to wake.
           </p>

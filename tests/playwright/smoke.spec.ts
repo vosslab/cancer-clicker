@@ -122,6 +122,9 @@ test("smoke: Cancer Clicker keeps its mutation shop and cell evolution visible",
     await expect(page.locator(`#upgrade-${mutation.id}-level`)).toHaveText("1");
     await expect(page.locator(mutation.art)).toHaveAttribute("data-level", "1");
     await expect.poll(() => computedOpacity(page, mutation.art)).toBeGreaterThan(0);
+    await expect(button.locator("xpath=ancestor::article")).toHaveAttribute("data-owned", "true");
+    await expect(page.locator("#mutation-feedback")).toBeVisible();
+    await expect(page.locator("#mutation-feedback-title")).not.toHaveText("Surface evolved");
   }
 
   for (const selector of [
@@ -133,6 +136,7 @@ test("smoke: Cancer Clicker keeps its mutation shop and cell evolution visible",
     ".colony-three",
     ".colony-four",
     "#immune-patrol-image",
+    "#mutation-feedback img",
   ]) {
     await assetLoads(page, selector);
   }
@@ -174,6 +178,7 @@ test("smoke: Cancer Clicker keeps its mutation shop and cell evolution visible",
 test("smoke: the always-open shop remains reachable on a phone", async ({ page }) => {
   const diagnostics = captureDiagnostics(page);
   await page.setViewportSize({ width: 390, height: 844 });
+  await page.emulateMedia({ reducedMotion: "reduce" });
   await page.goto("/");
 
   await startSimulation(page);
@@ -201,6 +206,8 @@ test("smoke: the always-open shop remains reachable on a phone", async ({ page }
   }
   await transporterButton.click();
   await expect(page.locator("#upgrade-transporters-level")).toHaveText("1");
+  await expect(page.locator("#mutation-feedback")).toBeVisible();
+  await expect(page.locator("#mutation-feedback-title")).toHaveText("Transporter swarm");
 
   await expect
     .poll(() =>

@@ -4,6 +4,10 @@
 
 ### Additions and New Features
 
+- Added a mutation-milestone feedback mechanic: every successful purchase now triggers an organic
+  SVG signal burst, names the equipped mutation, and leaves its shop card visibly marked.
+- Added `src/effects.css` as the focused motion and feedback cascade, with a stable reduced-motion
+  presentation and mobile placement that preserves the 16:10 tissue chamber.
 - Renamed the game and npm package to **Cancer Clicker** / `cancer-clicker`.
 - Added the confirmed live GitHub Pages game link to the README landing page.
 - Refreshed the README newcomer journey with a live demo, a managed gameplay screenshot, a
@@ -75,6 +79,8 @@
   the harness before the final verification run.
 - The first final Playwright launch was blocked by macOS sandbox Mach-port permissions; the same
   production-built suite passed when Chromium was allowed to launch with browser permission.
+- The first documentation gate rejected links to the new untracked effect sources; architecture
+  docs now use plain paths until those files enter the tracked repository set.
 
 ### Developer Tests and Notes
 

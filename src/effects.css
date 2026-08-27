@@ -1,0 +1,107 @@
+.mutation-feedback {
+  position: absolute;
+  z-index: 18;
+  top: 50%;
+  left: calc((100% - var(--shop-width)) / 2);
+  display: grid;
+  width: min(28rem, calc(100% - var(--shop-width) - 2rem));
+  grid-template-columns: 5.5rem 1fr;
+  gap: 0.75rem;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  transform: translate(-50%, -50%);
+  border: 2px solid var(--metabolic);
+  border-radius: 1.2rem 2.8rem;
+  color: #fff9ed;
+  background: linear-gradient(135deg, rgb(99 28 82 / 94%), rgb(16 12 39 / 96%));
+  box-shadow:
+    0 0 0 0.35rem rgb(76 243 226 / 16%),
+    0 0 3rem rgb(255 73 145 / 62%);
+  pointer-events: none;
+}
+.mutation-feedback.is-active {
+  animation: mutation-feedback-arrive 1.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+.mutation-feedback[hidden] {
+  display: none;
+}
+.mutation-feedback img {
+  width: 5.5rem;
+  filter: drop-shadow(0 0 0.8rem rgb(76 243 226 / 70%));
+}
+.mutation-feedback span,
+.mutation-feedback small {
+  display: block;
+  color: var(--nutrient);
+  font-weight: 850;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.mutation-feedback strong {
+  display: block;
+  margin-block: 0.15rem;
+  color: var(--metabolic);
+  font-size: clamp(1.15rem, 2.2vw, 1.7rem);
+  text-transform: uppercase;
+}
+.mutation-feedback small {
+  color: var(--muted);
+  font-size: 0.72rem;
+  letter-spacing: 0.04em;
+}
+.upgrade-card[data-owned="true"] {
+  border-color: rgb(76 243 226 / 45%);
+  background: linear-gradient(
+    135deg,
+    rgb(76 243 226 / 12%),
+    rgb(200 247 90 / 7%) 48%,
+    rgb(10 5 19 / 55%)
+  );
+  box-shadow: inset 0 0 1.2rem rgb(76 243 226 / 7%);
+}
+.upgrade-card[data-owned="true"] h3::after {
+  content: "  EQUIPPED";
+  color: var(--metabolic);
+  font-size: 0.62rem;
+  letter-spacing: 0.08em;
+}
+@keyframes mutation-feedback-arrive {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -42%) scale(0.72) rotate(-3deg);
+  }
+  18%,
+  72% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -56%) scale(1.04);
+  }
+}
+@media (max-width: 700px) {
+  .mutation-feedback {
+    top: 43%;
+    left: 50%;
+    width: min(92%, 25rem);
+    grid-template-columns: 4.2rem 1fr;
+  }
+  .mutation-feedback img {
+    width: 4.2rem;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .mutation-feedback.is-active {
+    animation: mutation-feedback-still 1.7s linear both !important;
+  }
+  @keyframes mutation-feedback-still {
+    0%,
+    85% {
+      opacity: 1;
+    }
+    100% {
+      opacity: 0;
+    }
+  }
+}

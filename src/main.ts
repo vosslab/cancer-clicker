@@ -12,6 +12,12 @@ import type { SimulationState, UpgradeId } from "./types/simulation";
 import { renderGame } from "./ui_rendering";
 
 const TICK_INTERVAL_MILLISECONDS = 250;
+const MUTATION_FEEDBACK: Readonly<Record<UpgradeId, readonly [string, string]>> = {
+  transporters: ["Transporter swarm", "Nutrient capture compounds"],
+  glycolysis: ["Glycolysis burst", "Energy harvest compounds"],
+  angiogenesis: ["Angiogenesis signal", "Blood supply compounds"],
+  immune_cloak: ["Immune cloak", "Host-response drag falls"],
+};
 
 let state: SimulationState = createInitialState();
 
@@ -24,6 +30,10 @@ function main(): void {
   restartButton.addEventListener("click", restartSimulation);
   cellClickTarget.addEventListener("click", harvestNutrients);
   cellClickTarget.addEventListener("animationend", removeClickFeedback);
+  requiredElement<HTMLElement>("#mutation-feedback").addEventListener(
+    "animationend",
+    hideMutationFeedback,
+  );
   document.addEventListener("click", handleManagementClick);
   window.setInterval(advanceClock, TICK_INTERVAL_MILLISECONDS);
   render();
@@ -46,6 +56,7 @@ function startSimulation(): void {
 
 function restartSimulation(): void {
   state = createInitialState();
+  requiredElement<HTMLElement>("#mutation-feedback").hidden = true;
   render();
 }
 
@@ -87,9 +98,32 @@ function handleManagementClick(event: MouseEvent): void {
 
   if (button.dataset["action"] === "buy-upgrade") {
     const upgradeId = readUpgradeId(button);
-    state = purchaseUpgrade(state, upgradeId);
+    const previousLevel = state.upgradeLevels[upgradeId];
+    const nextState = purchaseUpgrade(state, upgradeId);
+    state = nextState;
     render();
+    if (nextState.upgradeLevels[upgradeId] > previousLevel) {
+      triggerMutationFeedback(upgradeId, nextState.upgradeLevels[upgradeId]);
+    }
   }
+}
+
+function triggerMutationFeedback(upgradeId: UpgradeId, level: number): void {
+  const feedback = requiredElement<HTMLElement>("#mutation-feedback");
+  const [title, detail] = MUTATION_FEEDBACK[upgradeId];
+  requiredElement<HTMLElement>("#mutation-feedback-title").textContent = title;
+  requiredElement<HTMLElement>("#mutation-feedback-detail").textContent =
+    `${detail} - level ${level}`;
+  feedback.hidden = false;
+  feedback.classList.remove("is-active");
+  window.requestAnimationFrame(() => feedback.classList.add("is-active"));
+}
+
+function hideMutationFeedback(event: AnimationEvent): void {
+  if (event.target !== event.currentTarget) return;
+  const feedback = requiredElement<HTMLElement>("#mutation-feedback");
+  feedback.classList.remove("is-active");
+  feedback.hidden = true;
 }
 
 function managementButton(target: EventTarget | null): HTMLButtonElement | null {

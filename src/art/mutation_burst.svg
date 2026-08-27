@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240" role="img" aria-labelledby="mutation-burst-title mutation-burst-desc">
+  <title id="mutation-burst-title">Mutation signal burst</title>
+  <desc id="mutation-burst-desc">A glowing organic cell with radiating receptors and molecular signal rings.</desc>
+  <defs>
+    <radialGradient id="mutation-burst-cell" cx="42%" cy="34%" r="68%">
+      <stop offset="0" stop-color="#fff4c7" />
+      <stop offset="0.35" stop-color="#ff76bd" />
+      <stop offset="0.78" stop-color="#ad287f" />
+      <stop offset="1" stop-color="#47154f" />
+    </radialGradient>
+    <radialGradient id="mutation-burst-nucleus" cx="38%" cy="32%" r="70%">
+      <stop offset="0" stop-color="#ecffff" />
+      <stop offset="0.42" stop-color="#61f8e9" />
+      <stop offset="1" stop-color="#16467a" />
+    </radialGradient>
+    <filter id="mutation-burst-glow" x="-80%" y="-80%" width="260%" height="260%">
+      <feGaussianBlur stdDeviation="5" result="blur" />
+      <feMerge><feMergeNode in="blur" /><feMergeNode in="SourceGraphic" /></feMerge>
+    </filter>
+    <g id="mutation-burst-receptor">
+      <path d="M120 37 113 22 120 8 127 22Z" fill="#c8f75a" stroke="#f4ffd0" stroke-width="2" />
+      <circle cx="120" cy="8" r="4" fill="#4cf3e2" />
+    </g>
+  </defs>
+  <g fill="none" stroke-linecap="round" filter="url(#mutation-burst-glow)">
+    <circle cx="120" cy="120" r="98" stroke="#4cf3e2" stroke-width="3" stroke-dasharray="3 13" opacity="0.74" />
+    <circle cx="120" cy="120" r="82" stroke="#c8f75a" stroke-width="2" stroke-dasharray="20 9" opacity="0.62" />
+  </g>
+  <g id="mutation-burst-receptors">
+    <use href="#mutation-burst-receptor" />
+    <use href="#mutation-burst-receptor" transform="rotate(45 120 120)" />
+    <use href="#mutation-burst-receptor" transform="rotate(90 120 120)" />
+    <use href="#mutation-burst-receptor" transform="rotate(135 120 120)" />
+    <use href="#mutation-burst-receptor" transform="rotate(180 120 120)" />
+    <use href="#mutation-burst-receptor" transform="rotate(225 120 120)" />
+    <use href="#mutation-burst-receptor" transform="rotate(270 120 120)" />
+    <use href="#mutation-burst-receptor" transform="rotate(315 120 120)" />
+  </g>
+  <path d="M120 43C139 38 150 53 163 62c15 10 37 7 42 25 5 17-12 29-13 45-1 18 15 32 5 48-10 17-31 10-47 17-14 7-21 27-40 24-18-3-21-24-34-34-13-11-35-8-40-26-5-17 12-29 13-45 1-18-15-32-5-48 10-17 31-10 47-17 14-7 21-27 40-24Z" fill="url(#mutation-burst-cell)" stroke="#ffd5e8" stroke-width="4" />
+  <circle cx="120" cy="120" r="42" fill="url(#mutation-burst-nucleus)" stroke="#e9fffb" stroke-width="4" />
+  <path d="M91 115c16-20 31-25 52-11M95 143c17 10 34 8 49-5" fill="none" stroke="#fff7c6" stroke-width="7" stroke-linecap="round" opacity="0.68" />
+  <circle cx="108" cy="106" r="7" fill="#fff" opacity="0.9" />
+  <g fill="#c8f75a" stroke="#fffad4" stroke-width="2">
+    <circle cx="73" cy="92" r="7" /><circle cx="162" cy="82" r="6" />
+    <circle cx="173" cy="146" r="8" /><circle cx="82" cy="161" r="6" />
+  </g>
+</svg>

@@ -108,6 +108,10 @@ function renderUpgrade(id: UpgradeId, state: SimulationState, costs: UpgradeCost
   const levelElement = requiredElement<HTMLElement>(`#upgrade-${id}-level`);
   const costElement = requiredElement<HTMLElement>(`#upgrade-${id}-cost`);
   const button = requiredElement<HTMLButtonElement>(`[data-upgrade-id='${id}']`);
+  const card = button.closest<HTMLElement>(".upgrade-card");
+  if (card === null) {
+    throw new Error(`Cancer Clicker renderer requires an upgrade card for ${id}.`);
+  }
   const affordable =
     state.resources.nutrients >= cost.nutrients &&
     state.resources.energy >= cost.energy &&
@@ -116,6 +120,7 @@ function renderUpgrade(id: UpgradeId, state: SimulationState, costs: UpgradeCost
   costElement.textContent = formatResourceCost(cost);
   button.disabled = !affordable || state.status === "ready";
   button.setAttribute("aria-label", `Level ${level + 1}: ${costElement.textContent}`);
+  card.dataset["owned"] = String(level > 0);
 }
 
 function formatResourceCost(cost: ResourceCost): string {

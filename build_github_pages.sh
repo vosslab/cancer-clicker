@@ -10,7 +10,7 @@
 #   - Type-checks via 'tsc --noEmit -p tsconfig.json'.
 #   - Resolves the entry: src/main.ts preferred, src/init.ts legacy fallback.
 #     Aborts with an actionable error if neither exists.
-#   - Verifies src/index.html and src/style.css exist before copying;
+#   - Verifies src/index.html, src/style.css, and src/effects.css exist before copying;
 #     aborts with an actionable error if missing.
 #   - Verifies src/index.html references dist/main.js with a module script
 #     tag (warns if missing -- the page will load but main.js is dead).
@@ -38,14 +38,16 @@ else
 fi
 
 # Verify required static assets before any destructive step.
-for required in src/index.html src/style.css; do
+for required in src/index.html src/style.css src/effects.css; do
 	if [ ! -f "$required" ]; then
 		echo "ERROR: required source file missing: $required" >&2
 		case "$required" in
 			src/index.html)
 				echo "  Create src/index.html with a <script type=\"module\" src=\"main.js\"></script> tag." >&2 ;;
-			src/style.css)
+		src/style.css)
 				echo "  Create src/style.css (empty file is fine)." >&2 ;;
+		src/effects.css)
+				echo "  Create src/effects.css for state feedback and motion." >&2 ;;
 		esac
 		exit 1
 	fi
@@ -74,6 +76,7 @@ npx esbuild "$ENTRY" \
 
 cp src/index.html dist/index.html
 cp src/style.css dist/style.css
+cp src/effects.css dist/effects.css
 cp -R src/art dist/art
 touch dist/.nojekyll
 
@@ -81,5 +84,7 @@ test -f dist/index.html
 test -f dist/main.js
 test -f dist/art/tissue_scene.svg
 test -f dist/art/tumor_cell.svg
+test -f dist/art/mutation_burst.svg
+test -f dist/effects.css
 
 echo "Built dist/ (GitHub Pages-ready)."
