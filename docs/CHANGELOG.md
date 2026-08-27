@@ -38,6 +38,12 @@
 
 ### Behavior or Interface Changes
 
+- Reworked nutrient metabolism after strategy simulations exposed a late-game `0/s` nutrient
+  rate. A bounded share of captured nutrients now feeds metabolism, while glycolysis improves the
+  energy yield from that share; every active and balanced upgrade strategy retains passive nutrient
+  accumulation.
+- Added the canonical root `VERSION` value to the bottom of the permanent Mutation Shop; the Pages
+  build injects it so the visible label follows future version updates automatically.
 - Host control is a phase transition, not a win condition: at 100% the colony begins endless
   HeLa-inspired lineage expansion.
 - Immune pressure slows accumulation but no longer causes a terminal loss state.
@@ -84,6 +90,8 @@
 
 ### Developer Tests and Notes
 
+- Added a high-level strategy regression that checks transporter-heavy, glycolysis-heavy, and
+  balanced colonies all retain a positive published nutrient rate.
 - `./check_codebase.sh` passed 5 checks, including 11 Node tests.
 - `./build_github_pages.sh` completed successfully, including copying the authored SVG assets into
   the Pages-ready `dist/` folder; authored SVG files also passed XML validation.
@@ -93,6 +101,6 @@
   mutation recipe ingredients.
 - README now links directly to the Pages workflow, editable SVG source, and deterministic economy
   test source for faster maintenance navigation.
-- `source source_me.sh && pytest tests` passed 661 tests.
+- `source source_me.sh && pytest tests` passed 667 tests.
 - These checks establish a Pages-ready build; the live GitHub Pages deployment is confirmed at the
   README link.

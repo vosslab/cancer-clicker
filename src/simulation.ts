@@ -11,6 +11,7 @@ import type {
 } from "./types/simulation";
 
 const NUMBER_CAP = Number.MAX_SAFE_INTEGER;
+const MAX_NUTRIENT_CONVERSION_SHARE = 0.85;
 const MAX_UPKEEP_SHARE = 0.85;
 const MAX_GROWTH_INVESTMENT_SHARE = 0.85;
 
@@ -35,10 +36,17 @@ export function calculateEconomySnapshot(state: SimulationState): EconomySnapsho
     captureMultiplier,
     immuneResilience,
   );
-  const energyProduction = safeProduct(
-    nutrientIncome,
-    ECONOMY_CONFIG.baseEnergyYield,
+  // Metabolism consumes a bounded allocation of captured nutrients. Glycolysis
+  // improves the energy yield from that allocation instead of consuming an
+  // ever-larger share, so every capture upgrade retains visible nutrient income.
+  const nutrientConversionShare = Math.min(
+    MAX_NUTRIENT_CONVERSION_SHARE,
     0.72 + biomassGrowthShare * 0.28,
+  );
+  const nutrientUse = safeProduct(nutrientIncome, nutrientConversionShare);
+  const energyProduction = safeProduct(
+    nutrientUse,
+    ECONOMY_CONFIG.baseEnergyYield,
     glycolysis,
     healthProductionFactor,
   );
@@ -57,7 +65,6 @@ export function calculateEconomySnapshot(state: SimulationState): EconomySnapsho
     1 + Math.log1p(state.upgradeLevels.glycolysis) * 0.16,
     healthProductionFactor,
   );
-  const nutrientUse = energyProduction / ECONOMY_CONFIG.baseEnergyYield;
   const nutrientStockRate = Math.max(0, safeAdd(nutrientIncome, -nutrientUse));
   const energyStockRate = Math.max(0, safeAdd(energyProduction, -upkeep));
   const growthInvestmentShare = Math.min(MAX_GROWTH_INVESTMENT_SHARE, 0.35 + biomassGrowthShare);

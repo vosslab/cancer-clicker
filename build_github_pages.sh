@@ -37,6 +37,12 @@ else
 	exit 1
 fi
 
+APP_VERSION="$(tr -d '\r\n' < VERSION)"
+if [[ ! "$APP_VERSION" =~ ^[0-9A-Za-z.-]+$ ]]; then
+	echo "ERROR: VERSION must contain only letters, numbers, dots, or hyphens." >&2
+	exit 1
+fi
+
 # Verify required static assets before any destructive step.
 for required in src/index.html src/style.css src/effects.css; do
 	if [ ! -f "$required" ]; then
@@ -74,7 +80,7 @@ npx esbuild "$ENTRY" \
 	--sourcemap \
 	--outfile=dist/main.js
 
-cp src/index.html dist/index.html
+sed "s/__APP_VERSION__/$APP_VERSION/g" src/index.html > dist/index.html
 cp src/style.css dist/style.css
 cp src/effects.css dist/effects.css
 cp -R src/art dist/art
@@ -86,5 +92,6 @@ test -f dist/art/tissue_scene.svg
 test -f dist/art/tumor_cell.svg
 test -f dist/art/mutation_burst.svg
 test -f dist/effects.css
+grep -q "v$APP_VERSION" dist/index.html
 
 echo "Built dist/ (GitHub Pages-ready)."

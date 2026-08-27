@@ -57,6 +57,8 @@ test("smoke: Cancer Clicker keeps its mutation shop and cell evolution visible",
   await expect(page).toHaveTitle("Cancer Clicker");
   await expect(page.getByRole("heading", { name: "Cancer Clicker" }).first()).toBeVisible();
   await expect(page.locator("#management-console")).toBeVisible();
+  await expect(page.getByLabel("Cancer Clicker version")).toBeVisible();
+  await expect(page.getByLabel("Cancer Clicker version")).toContainText(/v\d/);
   await expect(page.locator("#management-toggle")).toHaveCount(0);
   await expect(page.locator("#management-close")).toHaveCount(0);
   await expect(page.locator("#host-control-value")).toBeVisible();

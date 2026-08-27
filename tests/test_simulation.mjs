@@ -214,6 +214,21 @@ test("published passive resource rates remain finite and never create a visible 
   }
 });
 
+test("nutrient capture always leaves a visible passive surplus", () => {
+  const running = setSimulationStatus(createInitialState(), "running");
+  const strategies = [
+    { transporters: 80, glycolysis: 0, angiogenesis: 0, immune_cloak: 0 },
+    { transporters: 0, glycolysis: 80, angiogenesis: 0, immune_cloak: 0 },
+    { transporters: 40, glycolysis: 40, angiogenesis: 40, immune_cloak: 40 },
+  ];
+
+  for (const upgradeLevels of strategies) {
+    const economy = calculateEconomySnapshot({ ...running, upgradeLevels });
+    assert.ok(economy.nutrientStockRate > 0);
+    assert.ok(economy.nutrientStockRate < economy.nutrientIncome);
+  }
+});
+
 test("lineage expansion is dormant before takeover and accelerates after it", () => {
   const host = setSimulationStatus(createInitialState(), "running");
   const lineage = {
