@@ -25,8 +25,9 @@ signature on the founding cell.
 ## What do the `+amount/s` labels mean?
 
 They show the actual passive change to each resource stock per second, rather than a decorative
-estimate. The rate rises with cell health and purchased mutations. Passive rates and resource stocks
-never become negative; a resource is spent only by an affordable mutation purchase.
+estimate. Purchased mutations raise production, while bounded metabolic upkeep leaves every stock
+with a positive passive surplus. Passive rates and resource stocks never become negative; a
+resource is spent only by an affordable mutation purchase.
 
 ## Does the game pause or end?
 

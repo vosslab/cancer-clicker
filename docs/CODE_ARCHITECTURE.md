@@ -74,8 +74,9 @@ and uploads `dist/` to GitHub Pages.
 
 - Add a new mutation by extending `UpgradeId`, `INITIAL_UPGRADE_LEVELS`, and `UPGRADE_CONFIG`, then
   provide its simulation effect, shop markup, rendering mapping, SVG art, and economy/browser tests.
-- Adjust pacing through the named values in [src/constants.ts](/src/constants.ts); keep the published
-  stock-rate contract in [src/types/simulation.ts](/src/types/simulation.ts) accurate.
+- Adjust pacing through the named values in [src/constants.ts](/src/constants.ts), including the
+  compounding mutation cost and bounded nutrient, upkeep, growth, and health allocations. Keep the
+  published stock-rate contract in [src/types/simulation.ts](/src/types/simulation.ts) accurate.
 - Add visual layers in [src/art/](/src/art/) and reference them from [src/index.html](/src/index.html)
   and [src/ui_rendering.ts](/src/ui_rendering.ts) so purchases have a visible result.
 - Add durable interaction coverage in [tests/playwright/](/tests/playwright/) and deterministic

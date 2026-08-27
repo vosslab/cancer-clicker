@@ -42,6 +42,12 @@
   rate. A bounded share of captured nutrients now feeds metabolism, while glycolysis improves the
   energy yield from that share; every active and balanced upgrade strategy retains passive nutrient
   accumulation.
+- Changed mutation prices to compound by 25% per level after 30-minute simulations showed the
+  previous square-root curve allowed hundreds of nearly indistinguishable purchases. Early
+  mutations remain quick, while later levels return to meaningful incremental-game milestones.
+- Reduced the mature-colony production penalties from poor health and upkeep after two-hour runs
+  showed they could reverse mutation gains. Host pressure still slows growth, but cannot consume
+  more than 55% of energy production or erase the clicker's long-term momentum.
 - Added the canonical root `VERSION` value to the bottom of the permanent Mutation Shop; the Pages
   build injects it so the visible label follows future version updates automatically.
 - Host control is a phase transition, not a win condition: at 100% the colony begins endless
@@ -92,7 +98,10 @@
 
 - Added a high-level strategy regression that checks transporter-heavy, glycolysis-heavy, and
   balanced colonies all retain a positive published nutrient rate.
-- `./check_codebase.sh` passed 5 checks, including 11 Node tests.
+- Active, balanced, and mostly-idle simulation runs remained finite and productive through 24
+  in-game hours. At that horizon they reached 131-175 total mutation levels while retaining
+  positive nutrient, energy, and biomass rates.
+- `./check_codebase.sh` passed 5 checks, including 12 Node tests.
 - `./build_github_pages.sh` completed successfully, including copying the authored SVG assets into
   the Pages-ready `dist/` folder; authored SVG files also passed XML validation.
 - `./run_playwright_tests.sh --build` passed 2 production-built browser tests.

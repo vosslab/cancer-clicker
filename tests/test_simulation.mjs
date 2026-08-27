@@ -131,6 +131,7 @@ test("the mutation shop has uncapped, increasing upgrades", () => {
 
   assert.ok(colony.upgradeLevels.transporters > 3);
   assert.ok(costs.every((cost, index) => index === 0 || cost.biomass > costs[index - 1].biomass));
+  assert.ok(calculateUpgradeCost("transporters", 20).biomass > costs[10].biomass * 3);
 });
 
 test("mutation recipes debit only their declared resource ingredients", () => {

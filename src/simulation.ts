@@ -11,9 +11,6 @@ import type {
 } from "./types/simulation";
 
 const NUMBER_CAP = Number.MAX_SAFE_INTEGER;
-const MAX_NUTRIENT_CONVERSION_SHARE = 0.85;
-const MAX_UPKEEP_SHARE = 0.85;
-const MAX_GROWTH_INVESTMENT_SHARE = 0.85;
 
 //============================================
 
@@ -27,7 +24,11 @@ export function calculateEconomySnapshot(state: SimulationState): EconomySnapsho
   // more time capturing and converting resources. This intentionally levels
   // off so an uncapped mutation shop cannot make the economy numerically wild.
   const immuneResilience = immuneResilienceMultiplier(state.upgradeLevels.immune_cloak);
-  const healthProductionFactor = 0.55 + (state.cellHealth / 100) * 0.45;
+  const healthRange = 1 - ECONOMY_CONFIG.minimumHealthProductionFactor;
+  const healthProductionFactor = safeAdd(
+    ECONOMY_CONFIG.minimumHealthProductionFactor,
+    safeProduct(state.cellHealth / 100, healthRange),
+  );
   const captureMultiplier = safeProduct(transporters, angiogenesis);
   const nutrientIncome = safeProduct(
     ECONOMY_CONFIG.baseNutrientIncome,
@@ -40,7 +41,7 @@ export function calculateEconomySnapshot(state: SimulationState): EconomySnapsho
   // improves the energy yield from that allocation instead of consuming an
   // ever-larger share, so every capture upgrade retains visible nutrient income.
   const nutrientConversionShare = Math.min(
-    MAX_NUTRIENT_CONVERSION_SHARE,
+    ECONOMY_CONFIG.maxNutrientConversionShare,
     0.72 + biomassGrowthShare * 0.28,
   );
   const nutrientUse = safeProduct(nutrientIncome, nutrientConversionShare);
@@ -57,7 +58,10 @@ export function calculateEconomySnapshot(state: SimulationState): EconomySnapsho
   // The endless clicker economy treats maintenance as a production allocation,
   // never an unpayable debt. A mature lineage therefore keeps an energy surplus
   // instead of silently draining its visible energy stock.
-  const upkeep = Math.min(upkeepDemand, safeProduct(energyProduction, MAX_UPKEEP_SHARE));
+  const upkeep = Math.min(
+    upkeepDemand,
+    safeProduct(energyProduction, ECONOMY_CONFIG.maxUpkeepShare),
+  );
   const biomassProduction = safeProduct(
     Math.max(0, energyProduction - upkeep),
     ECONOMY_CONFIG.baseGrowthEfficiency,
@@ -67,7 +71,10 @@ export function calculateEconomySnapshot(state: SimulationState): EconomySnapsho
   );
   const nutrientStockRate = Math.max(0, safeAdd(nutrientIncome, -nutrientUse));
   const energyStockRate = Math.max(0, safeAdd(energyProduction, -upkeep));
-  const growthInvestmentShare = Math.min(MAX_GROWTH_INVESTMENT_SHARE, 0.35 + biomassGrowthShare);
+  const growthInvestmentShare = Math.min(
+    ECONOMY_CONFIG.maxGrowthInvestmentShare,
+    0.35 + biomassGrowthShare,
+  );
   const intendedGrowthInvestmentRate = safeProduct(biomassProduction, growthInvestmentShare);
   const biomassStockRate = Math.max(0, safeAdd(biomassProduction, -intendedGrowthInvestmentRate));
   const lineageExpansionRate =
@@ -112,7 +119,7 @@ export function calculateEconomySnapshot(state: SimulationState): EconomySnapsho
 export function calculateUpgradeCost(upgradeId: UpgradeId, level: number): ResourceCost {
   validateUpgradeLevel(level);
   const baseCost = UPGRADE_CONFIG[upgradeId].baseCost;
-  const multiplier = safeAdd(1, Math.sqrt(level) * 0.95, Math.log1p(level) * 0.65);
+  const multiplier = safeProduct(ECONOMY_CONFIG.upgradeCostGrowth ** level);
   return {
     nutrients: safeCeilCost(safeProduct(baseCost.nutrients, multiplier)),
     energy: safeCeilCost(safeProduct(baseCost.energy, multiplier)),
