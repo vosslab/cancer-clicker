@@ -6,6 +6,13 @@
 
 - Renamed the game and npm package to **Cancer Clicker** / `cancer-clicker`.
 - Added the confirmed live GitHub Pages game link to the README landing page.
+- Refreshed the README newcomer journey with a live demo, a managed gameplay screenshot, a
+  verified quick start, and routes into the maintainer documentation.
+- Added architecture, file-structure, installation, usage, related-projects, roadmap,
+  troubleshooting, cookbook, development, and FAQ guides grounded in the current game.
+- Added a compact `AGENTS.md` pointer file for repository rules and the required test command.
+- Added the reproducible Playwright capture harness and a 1280x800 Cancer Clicker colony
+  screenshot for the README.
 - Added an endless visual clicker loop: click the founding cell for nutrients, energy, and about one
   biomass, then spend resources to make later clicks accumulate faster.
 - Added an always-open Mutation Shop with uncapped, escalating mutations: Transporter swarm,
@@ -59,6 +66,15 @@
   behavioral browser checks while retaining the real interaction and aspect-ratio coverage.
 - The first `npm install` failed because the shared `~/.npm` cache was root-owned. Installation
   succeeded with the writable `/Users/vosslab/.cache/npm` cache; no `sudo` workaround is needed.
+- `news-release-docs` could not generate `docs/NEWS.md` or `docs/RELEASE_HISTORY.md` because
+  root `VERSION` is `26.08` while `package.json` is `2026.08.0`. Release documentation waits for
+  version metadata to agree.
+- `docs/TODO.md` and file-format documentation were intentionally not created because the current
+  static game exposes no supported backlog or file-format interface.
+- The first complete code gate found unformatted screenshot-capture JavaScript; Prettier corrected
+  the harness before the final verification run.
+- The first final Playwright launch was blocked by macOS sandbox Mach-port permissions; the same
+  production-built suite passed when Chromium was allowed to launch with browser permission.
 
 ### Developer Tests and Notes
 
@@ -71,6 +87,6 @@
   mutation recipe ingredients.
 - README now links directly to the Pages workflow, editable SVG source, and deterministic economy
   test source for faster maintenance navigation.
-- `source source_me.sh && python3 -m pytest tests/` passed 597 tests.
+- `source source_me.sh && pytest tests` passed 661 tests.
 - These checks establish a Pages-ready build; the live GitHub Pages deployment is confirmed at the
   README link.
