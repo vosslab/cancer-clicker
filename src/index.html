@@ -35,14 +35,23 @@
         <article class="resource-card resource-nutrients">
           <p>Nutrients</p>
           <output id="nutrients-value" aria-label="Nutrients">42</output>
+          <output id="nutrients-rate" class="resource-rate" aria-label="Nutrients per second"
+            >+0/s</output
+          >
         </article>
         <article class="resource-card resource-energy">
           <p>Energy</p>
           <output id="energy-value" aria-label="Energy">48</output>
+          <output id="energy-rate" class="resource-rate" aria-label="Energy per second"
+            >+0/s</output
+          >
         </article>
         <article class="resource-card resource-biomass">
           <p>Biomass</p>
           <output id="biomass-value" aria-label="Biomass">20</output>
+          <output id="biomass-rate" class="resource-rate" aria-label="Biomass per second"
+            >+0/s</output
+          >
         </article>
       </section>
       <section class="scene-panel" aria-labelledby="stage-title">
@@ -133,7 +142,15 @@
             </div>
             <div id="lineage-expansion" class="lineage-expansion" hidden>
               <dt>Lineage expansion</dt>
-              <dd><output id="lineage-expansion-value">0</output></dd>
+              <dd>
+                <output id="lineage-expansion-value">0</output>
+                <output
+                  id="lineage-expansion-rate"
+                  class="resource-rate"
+                  aria-label="Lineage expansion per second"
+                  >+0/s</output
+                >
+              </dd>
               <p>Beyond host control</p>
             </div>
           </dl>

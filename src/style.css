@@ -18,7 +18,6 @@
   --type-control: 0.875rem;
   --type-shop-body: 0.875rem;
 }
-
 * {
   box-sizing: border-box;
 }
@@ -83,7 +82,6 @@ a:focus-visible,
   white-space: nowrap;
   border: 0;
 }
-
 #app {
   position: relative;
   width: min(100vw, calc(100vh * 1.6));
@@ -133,7 +131,6 @@ h3 {
   letter-spacing: 0.16em;
   text-transform: uppercase;
 }
-
 /* Top telemetry always stays left of the mutation rail. */
 .resource-header {
   position: absolute;
@@ -170,7 +167,6 @@ h3 {
 #restart-button {
   background: linear-gradient(135deg, #7b364d, #4a1d3c);
 }
-
 .resource-grid {
   position: absolute;
   z-index: 12;
@@ -240,7 +236,6 @@ h3 {
   color: #ffa2bd;
   text-shadow: 0 0 0.8rem rgb(255 92 145 / 38%);
 }
-
 .scene-panel {
   position: absolute;
   z-index: 1;
@@ -292,7 +287,6 @@ img.tissue-scene {
   object-fit: cover;
   mix-blend-mode: screen;
 }
-
 .cell-click-target {
   position: absolute;
   z-index: 7;
@@ -471,7 +465,6 @@ img.tissue-scene {
   box-shadow: 0 0.5rem 1.2rem rgb(3 0 5 / 36%);
   backdrop-filter: blur(0.45rem);
 }
-
 #nutrient-particles {
   position: absolute;
   z-index: 4;
@@ -500,7 +493,6 @@ img.tissue-scene {
   animation-duration: 6.2s;
   animation-delay: -2.7s;
 }
-
 .survival-hud {
   position: absolute;
   z-index: 8;
@@ -585,7 +577,6 @@ img.tissue-scene {
 #cell-health-bar > span {
   background: linear-gradient(90deg, var(--metabolic), var(--nutrient));
 }
-
 #game-message {
   position: absolute;
   z-index: 7;
@@ -604,7 +595,6 @@ img.tissue-scene {
   box-shadow: 0 0 1.4rem rgb(76 243 226 / 20%);
   backdrop-filter: blur(0.6rem);
 }
-
 .management-console {
   position: absolute;
   z-index: 30;
@@ -720,7 +710,6 @@ button[data-action="buy-upgrade"] {
   font-size: var(--type-detail);
   line-height: 1.42;
 }
-
 #start-overlay {
   position: absolute;
   z-index: 50;
@@ -771,7 +760,6 @@ button[data-action="buy-upgrade"] {
     0 0 1.8rem rgb(200 247 90 / 40%),
     inset 0 1px rgb(255 255 255 / 55%);
 }
-
 body[data-simulation-status="paused"] .scene-panel {
   filter: saturate(0.58) brightness(0.8);
 }
@@ -790,69 +778,18 @@ body[data-colony-phase="lineage"] #game-message {
   border-color: rgb(255 181 91 / 65%);
   animation-duration: 1.6s;
 }
-
-@keyframes membrane-breathe {
-  0%,
-  100% {
-    transform: scale(0.98) rotate(-1deg);
-  }
-  50% {
-    transform: scale(1.025) rotate(1deg);
-  }
-}
-@keyframes cell-heartbeat {
-  0%,
-  100% {
-    transform: scale(0.9);
-  }
-  12% {
-    transform: scale(0.94);
-  }
-  24% {
-    transform: scale(0.9);
-  }
-}
-@keyframes metabolic-spin {
-  to {
-    transform: scale(calc(0.92 + var(--mutation-intensity, 0) * 0.12)) rotate(360deg);
-  }
-}
-@keyframes nutrient-flow {
-  0% {
-    opacity: 0;
-    transform: translate(-3rem, 12rem) scale(0.3);
-  }
-  18%,
-  78% {
-    opacity: 1;
-  }
-  100% {
-    opacity: 0;
-    transform: translate(18rem, -12rem) scale(1.3);
-  }
-}
-@keyframes nutrient-ripple {
-  from {
-    opacity: 0.9;
-    transform: scale(0.58);
-  }
-  to {
-    opacity: 0;
-    transform: scale(1.18);
-  }
-}
-@keyframes harvest-pop {
-  0% {
-    transform: translate(-50%, -50%) scale(1);
-  }
-  45% {
-    transform: translate(-50%, -50%) scale(1.075);
-  }
-  100% {
-    transform: translate(-50%, -50%) scale(1);
-  }
-}
-
+/* prettier-ignore */
+@keyframes membrane-breathe { 0%, 100% { transform: scale(0.98) rotate(-1deg); } 50% { transform: scale(1.025) rotate(1deg); } }
+/* prettier-ignore */
+@keyframes cell-heartbeat { 0%, 100% { transform: scale(0.9); } 12% { transform: scale(0.94); } 24% { transform: scale(0.9); } }
+/* prettier-ignore */
+@keyframes metabolic-spin { to { transform: scale(calc(0.92 + var(--mutation-intensity, 0) * 0.12)) rotate(360deg); } }
+/* prettier-ignore */
+@keyframes nutrient-flow { 0% { opacity: 0; transform: translate(-3rem, 12rem) scale(0.3); } 18%, 78% { opacity: 1; } 100% { opacity: 0; transform: translate(18rem, -12rem) scale(1.3); } }
+/* prettier-ignore */
+@keyframes nutrient-ripple { from { opacity: 0.9; transform: scale(0.58); } to { opacity: 0; transform: scale(1.18); } }
+/* prettier-ignore */
+@keyframes harvest-pop { 0% { transform: translate(-50%, -50%) scale(1); } 45% { transform: translate(-50%, -50%) scale(1.075); } 100% { transform: translate(-50%, -50%) scale(1); } }
 @media (max-width: 700px) {
   :root {
     --space: 0.42rem;
@@ -923,7 +860,6 @@ body[data-colony-phase="lineage"] #game-message {
     min-inline-size: 0;
     min-block-size: 2.35rem;
     padding: 0.35rem 0.45rem;
-    font-size: var(--type-control);
   }
   .resource-grid {
     top: 3.05rem;
@@ -937,8 +873,6 @@ body[data-colony-phase="lineage"] #game-message {
   }
   .resource-card p {
     margin-bottom: 0.14rem;
-    font-size: var(--type-label);
-    letter-spacing: 0.04em;
   }
   #nutrients-value,
   #energy-value,
@@ -967,7 +901,6 @@ body[data-colony-phase="lineage"] #game-message {
   .click-hint {
     bottom: -4%;
     padding: 0.32rem 0.48rem;
-    font-size: 0.65rem;
   }
   .survival-hud {
     right: var(--space);
@@ -983,13 +916,11 @@ body[data-colony-phase="lineage"] #game-message {
     border-radius: 0.5rem;
   }
   .survival-hud dt {
-    font-size: var(--type-label);
   }
   .survival-hud dd {
     font-size: 0.76rem;
   }
   .lineage-expansion p {
-    font-size: var(--type-label);
   }
   .immune-threat {
     font-size: 0.65rem;
@@ -1020,7 +951,6 @@ body[data-colony-phase="lineage"] #game-message {
     letter-spacing: 0.08em;
   }
   .console-heading h2 {
-    font-size: 1.2rem;
   }
   .shop-ready {
     min-width: 2rem;
@@ -1029,7 +959,6 @@ body[data-colony-phase="lineage"] #game-message {
   }
   .shop-intro {
     margin-bottom: 0.7rem;
-    font-size: var(--type-shop-body);
   }
   .upgrade-grid {
     gap: 0.55rem;
@@ -1058,7 +987,6 @@ body[data-colony-phase="lineage"] #game-message {
     font-size: 0.8rem;
   }
 }
-
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,

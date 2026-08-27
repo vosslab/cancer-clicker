@@ -33,6 +33,9 @@ export function renderGame(
   requiredElement<HTMLOutputElement>("#biomass-value").value = formatCompactNumber(
     state.resources.biomass,
   );
+  renderResourceRate("#nutrients-rate", economy.nutrientStockRate);
+  renderResourceRate("#energy-rate", economy.energyStockRate);
+  renderResourceRate("#biomass-rate", economy.biomassStockRate);
   requiredElement<HTMLOutputElement>("#host-control-value").value =
     `${formatNumber(state.hostControl)}%`;
   requiredElement<HTMLOutputElement>("#cell-health-value").value =
@@ -47,7 +50,7 @@ export function renderGame(
   renderUpgrade("angiogenesis", state, upgradeCosts);
   renderUpgrade("immune_cloak", state, upgradeCosts);
   renderShopReadyCount(state, upgradeCosts);
-  renderLineage(state);
+  renderLineage(state, economy);
   renderCellEvolution(state);
 
   const pauseButton = requiredElement<HTMLButtonElement>("#pause-button");
@@ -128,12 +131,17 @@ function formatResourceCost(cost: ResourceCost): string {
   return components.join(" + ");
 }
 
-function renderLineage(state: SimulationState): void {
+function renderLineage(state: SimulationState, economy: EconomySnapshot): void {
   const lineageContainer = requiredElement<HTMLElement>("#lineage-expansion");
   lineageContainer.hidden = state.phase !== "lineage";
   requiredElement<HTMLOutputElement>("#lineage-expansion-value").value = formatCompactNumber(
     state.lineageExpansion,
   );
+  renderResourceRate("#lineage-expansion-rate", economy.lineageExpansionRate);
+}
+
+function renderResourceRate(selector: string, rate: number): void {
+  requiredElement<HTMLOutputElement>(selector).value = formatRate(rate);
 }
 
 function renderCellEvolution(state: SimulationState): void {
@@ -207,6 +215,10 @@ function formatNumber(value: number): string {
 }
 function formatCompactNumber(value: number): string {
   return COMPACT_NUMBER.format(value);
+}
+function formatRate(value: number): string {
+  if (!Number.isFinite(value) || value === 0) return "0/s";
+  return `${value > 0 ? "+" : ""}${formatCompactNumber(value)}/s`;
 }
 function formatDecimal(value: number): string {
   return value.toFixed(2);
