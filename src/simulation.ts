@@ -52,6 +52,21 @@ export function calculateEconomySnapshot(state: SimulationState): EconomySnapsho
     1 + Math.log1p(state.upgradeLevels.glycolysis) * 0.16,
     healthProductionFactor,
   );
+  const nutrientUse = energyProduction / ECONOMY_CONFIG.baseEnergyYield;
+  const nutrientStockRate = safeAdd(nutrientIncome, -nutrientUse);
+  const energyStockRate = safeAdd(energyProduction, -upkeep);
+  const intendedGrowthInvestmentRate = safeProduct(biomassProduction, 0.35 + growthShare);
+  const biomassStockRate = safeAdd(biomassProduction, -intendedGrowthInvestmentRate);
+  const lineageExpansionRate =
+    state.phase === "lineage"
+      ? safeProduct(
+          state.cellMass,
+          ECONOMY_CONFIG.lineageExpansionPerMass,
+          0.65 + growthShare,
+          upgradeEffect(state.upgradeLevels.transporters, 0.12),
+          upgradeEffect(state.upgradeLevels.glycolysis, 0.16),
+        )
+      : 0;
   const effectiveImmunePressure = Math.max(
     0,
     state.immunePressure - evasionShare * 8 - Math.log1p(state.upgradeLevels.immune_cloak) * 5,
@@ -61,7 +76,17 @@ export function calculateEconomySnapshot(state: SimulationState): EconomySnapsho
     0.12,
     1 / immuneCloak,
   );
-  return { nutrientIncome, energyProduction, upkeep, biomassProduction, immuneDamage };
+  return {
+    nutrientStockRate,
+    energyStockRate,
+    biomassStockRate,
+    lineageExpansionRate,
+    nutrientIncome,
+    energyProduction,
+    upkeep,
+    biomassProduction,
+    immuneDamage,
+  };
 }
 
 /**
@@ -207,15 +232,12 @@ export function advanceSimulation(state: SimulationState, deltaSeconds: number):
   );
   const flowingState: SimulationState = { ...state, elapsedSeconds, bloodFlow };
   const economy = calculateEconomySnapshot(flowingState);
-  const nutrientUse = economy.energyProduction / ECONOMY_CONFIG.baseEnergyYield;
-  const energyDelta = economy.energyProduction - economy.upkeep;
   const availableBiomass = safeAdd(
     state.resources.biomass,
     safeProduct(economy.biomassProduction, deltaSeconds),
   );
   const growthInvestment = safeProduct(
-    economy.biomassProduction,
-    0.35 + state.allocation.growth / 100,
+    economy.biomassProduction - economy.biomassStockRate,
     deltaSeconds,
   );
   const investedBiomass = Math.min(availableBiomass, growthInvestment);
@@ -243,27 +265,15 @@ export function advanceSimulation(state: SimulationState, deltaSeconds: number):
     state.phase === "host" && hostControl >= ECONOMY_CONFIG.takeoverHostControl
       ? "lineage"
       : state.phase;
-  const lineageGain =
-    phase === "lineage"
-      ? safeProduct(
-          cellMass,
-          ECONOMY_CONFIG.lineageExpansionPerMass,
-          0.65 + state.allocation.growth / 100,
-          upgradeEffect(state.upgradeLevels.transporters, 0.12),
-          upgradeEffect(state.upgradeLevels.glycolysis, 0.16),
-          deltaSeconds,
-        )
-      : 0;
+  const lineageEconomy = calculateEconomySnapshot({ ...flowingState, cellMass, phase });
+  const lineageGain = safeProduct(lineageEconomy.lineageExpansionRate, deltaSeconds);
   const resources = {
     nutrients: finiteNonNegative(
-      safeAdd(
-        state.resources.nutrients,
-        safeProduct(economy.nutrientIncome - nutrientUse, deltaSeconds),
-      ),
+      safeAdd(state.resources.nutrients, safeProduct(economy.nutrientStockRate, deltaSeconds)),
       "nutrients",
     ),
     energy: finiteNonNegative(
-      safeAdd(state.resources.energy, safeProduct(energyDelta, deltaSeconds)),
+      safeAdd(state.resources.energy, safeProduct(economy.energyStockRate, deltaSeconds)),
       "energy",
     ),
     biomass: finiteNonNegative(availableBiomass - investedBiomass, "biomass"),

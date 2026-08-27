@@ -13,6 +13,10 @@
   --glass: rgb(25 9 31 / 74%);
   --space: clamp(0.65rem, 1.2vw, 1.1rem);
   --shop-width: clamp(12.5rem, 25vw, 22rem);
+  --type-label: 0.75rem;
+  --type-detail: 0.8125rem;
+  --type-control: 0.875rem;
+  --type-shop-body: 0.875rem;
 }
 
 * {
@@ -116,7 +120,7 @@ h1 {
   text-shadow: 0 0 1rem rgb(255 83 140 / 35%);
 }
 h2 {
-  font-size: clamp(0.95rem, 1.35vw, 1.25rem);
+  font-size: clamp(1.125rem, 1.45vw, 1.35rem);
 }
 h3 {
   font-size: 0.95rem;
@@ -124,7 +128,7 @@ h3 {
 .eyebrow {
   margin: 0;
   color: var(--nutrient);
-  font-size: 0.63rem;
+  font-size: var(--type-label);
   font-weight: 850;
   letter-spacing: 0.16em;
   text-transform: uppercase;
@@ -154,9 +158,9 @@ h3 {
 }
 .command-bar button {
   min-inline-size: 4.7rem;
-  min-block-size: 2.25rem;
-  padding: 0.4rem 0.62rem;
-  font-size: 0.72rem;
+  min-block-size: 2.55rem;
+  padding: 0.48rem 0.72rem;
+  font-size: var(--type-control);
   font-weight: 800;
   letter-spacing: 0.04em;
 }
@@ -181,8 +185,8 @@ h3 {
 .resource-card {
   position: relative;
   min-width: 0;
-  min-height: 4.85rem;
-  padding: 0.52rem 0.65rem;
+  min-height: 5.5rem;
+  padding: 0.6rem 0.7rem;
   overflow: hidden;
   border: 1px solid var(--line);
   border-radius: 0.85rem;
@@ -200,9 +204,9 @@ h3 {
 }
 .resource-card p {
   display: block;
-  margin: 0 0 0.22rem;
+  margin: 0 0 0.28rem;
   color: var(--muted);
-  font-size: 0.61rem;
+  font-size: var(--type-label);
   font-weight: 800;
   letter-spacing: 0.1em;
   text-transform: uppercase;
@@ -212,9 +216,17 @@ h3 {
 #biomass-value {
   display: block;
   font-family: Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;
-  font-size: clamp(1.35rem, 2.8vw, 2.55rem);
+  font-size: clamp(1.75rem, 3vw, 2.7rem);
   line-height: 1;
   letter-spacing: 0.04em;
+}
+.resource-card .resource-rate {
+  margin: 0.18rem 0 0;
+  color: var(--muted);
+  font-size: var(--type-label);
+  font-weight: 700;
+  letter-spacing: 0.025em;
+  text-transform: none;
 }
 .resource-nutrients output {
   color: var(--nutrient);
@@ -451,7 +463,7 @@ img.tissue-scene {
   border: 1px solid rgb(76 243 226 / 47%);
   border-radius: 999px;
   color: var(--nutrient);
-  font-size: clamp(0.58rem, 1.2vw, 0.82rem);
+  font-size: clamp(0.75rem, 1.2vw, 0.9rem);
   font-weight: 900;
   letter-spacing: 0.11em;
   text-shadow: 0 0 0.7rem rgb(76 243 226 / 68%);
@@ -495,15 +507,15 @@ img.tissue-scene {
   left: var(--space);
   bottom: var(--space);
   display: grid;
-  width: min(15.5rem, calc(100% - var(--shop-width) - var(--space) * 2.5));
+  width: min(17rem, calc(100% - var(--shop-width) - var(--space) * 2.5));
   gap: 0.45rem;
   margin: 0;
 }
 .survival-hud > div {
   display: grid;
   grid-template-columns: 1fr auto;
-  gap: 0.22rem 0.45rem;
-  padding: 0.48rem 0.58rem;
+  gap: 0.3rem 0.5rem;
+  padding: 0.62rem 0.7rem;
   border: 1px solid rgb(255 255 255 / 16%);
   border-radius: 0.7rem;
   background: rgb(13 6 23 / 76%);
@@ -518,14 +530,14 @@ img.tissue-scene {
   grid-column: 1 / -1;
   margin: 0;
   color: var(--metabolic);
-  font-size: 0.54rem;
+  font-size: var(--type-label);
   font-weight: 750;
   letter-spacing: 0.05em;
   text-transform: uppercase;
 }
 .survival-hud dt {
   color: var(--muted);
-  font-size: 0.57rem;
+  font-size: var(--type-label);
   font-weight: 900;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -533,17 +545,17 @@ img.tissue-scene {
 .survival-hud dd {
   margin: 0;
   color: var(--ink);
-  font-size: 0.78rem;
+  font-size: 1rem;
   font-weight: 900;
 }
 .survival-hud .progress-track {
   grid-column: 1 / -1;
-  height: 0.42rem;
+  height: 0.58rem;
 }
 .immune-threat {
   margin-inline-start: 0.22rem;
   color: var(--warning);
-  font-size: 0.53rem;
+  font-size: var(--type-detail);
   white-space: nowrap;
 }
 .progress-track {
@@ -586,7 +598,7 @@ img.tissue-scene {
   border: 1px solid rgb(76 243 226 / 42%);
   border-radius: 999px;
   color: var(--nutrient);
-  font-size: clamp(0.64rem, 1.02vw, 0.82rem);
+  font-size: clamp(0.8rem, 1.02vw, 0.95rem);
   text-align: center;
   background: rgb(14 8 25 / 78%);
   box-shadow: 0 0 1.4rem rgb(76 243 226 / 20%);
@@ -640,7 +652,7 @@ img.tissue-scene {
   border: 1px solid rgb(200 247 90 / 70%);
   border-radius: 50%;
   color: #1d1730;
-  font-size: 0.8rem;
+  font-size: 0.9rem;
   font-weight: 950;
   background: var(--metabolic);
   box-shadow: 0 0 0.8rem rgb(200 247 90 / 55%);
@@ -648,8 +660,8 @@ img.tissue-scene {
 .shop-intro {
   margin: 0.1rem 0 0.75rem;
   color: var(--muted);
-  font-size: 0.74rem;
-  line-height: 1.35;
+  font-size: var(--type-shop-body);
+  line-height: 1.42;
 }
 .upgrade-market {
   padding: 0;
@@ -660,31 +672,31 @@ img.tissue-scene {
 }
 .upgrade-card {
   display: grid;
-  gap: 0.34rem;
-  padding: 0.64rem;
+  gap: 0.42rem;
+  padding: 0.74rem;
   border: 1px solid rgb(255 255 255 / 12%);
   border-radius: 0.72rem;
   background: linear-gradient(145deg, rgb(200 247 90 / 8%), transparent 44%), rgb(10 5 19 / 42%);
 }
 .upgrade-card h3 {
   color: var(--nutrient);
-  font-size: 0.84rem;
+  font-size: 0.95rem;
 }
 .upgrade-card p {
   margin: 0;
   color: var(--muted);
-  font-size: 0.71rem;
-  line-height: 1.32;
+  font-size: var(--type-detail);
+  line-height: 1.38;
 }
 .upgrade-card .signature-tag {
   color: var(--nutrient);
-  font-size: 0.6rem;
+  font-size: var(--type-label);
   font-weight: 800;
   letter-spacing: 0.04em;
   text-transform: uppercase;
 }
 .upgrade-meta {
-  font-size: 0.68rem !important;
+  font-size: var(--type-detail) !important;
 }
 [id^="upgrade-"][id$="-level"] {
   color: var(--nutrient);
@@ -696,17 +708,17 @@ img.tissue-scene {
 }
 button[data-action="buy-upgrade"] {
   width: 100%;
-  min-block-size: 2.35rem;
+  min-block-size: 2.6rem;
   color: var(--metabolic);
-  font-size: 0.76rem;
+  font-size: var(--type-control);
   font-weight: 800;
   background: linear-gradient(135deg, #3d5b38, #213a35);
 }
 .model-note {
   margin: 0.78rem 0 0;
   color: var(--muted);
-  font-size: 0.66rem;
-  line-height: 1.35;
+  font-size: var(--type-detail);
+  line-height: 1.42;
 }
 
 #start-overlay {
@@ -743,6 +755,7 @@ button[data-action="buy-upgrade"] {
 }
 #start-overlay p {
   color: var(--muted);
+  font-size: 0.95rem;
   line-height: 1.55;
 }
 #start-button {
@@ -750,6 +763,7 @@ button[data-action="buy-upgrade"] {
   margin-block-start: 1rem;
   color: #102019;
   font-weight: 950;
+  font-size: 0.95rem;
   letter-spacing: 0.1em;
   text-transform: uppercase;
   background: linear-gradient(135deg, #efff98, var(--metabolic));
@@ -777,16 +791,75 @@ body[data-colony-phase="lineage"] #game-message {
   animation-duration: 1.6s;
 }
 
-@keyframes membrane-breathe { 0%, 100% { transform: scale(0.98) rotate(-1deg); } 50% { transform: scale(1.025) rotate(1deg); } }
-@keyframes cell-heartbeat { 0%, 100% { transform: scale(0.9); } 12% { transform: scale(0.94); } 24% { transform: scale(0.9); } }
-@keyframes metabolic-spin { to { transform: scale(calc(0.92 + var(--mutation-intensity, 0) * 0.12)) rotate(360deg); } }
-@keyframes nutrient-flow { 0% { opacity: 0; transform: translate(-3rem, 12rem) scale(0.3); } 18%, 78% { opacity: 1; } 100% { opacity: 0; transform: translate(18rem, -12rem) scale(1.3); } }
-@keyframes nutrient-ripple { from { opacity: 0.9; transform: scale(0.58); } to { opacity: 0; transform: scale(1.18); } }
-@keyframes harvest-pop { 0% { transform: translate(-50%, -50%) scale(1); } 45% { transform: translate(-50%, -50%) scale(1.075); } 100% { transform: translate(-50%, -50%) scale(1); } }
+@keyframes membrane-breathe {
+  0%,
+  100% {
+    transform: scale(0.98) rotate(-1deg);
+  }
+  50% {
+    transform: scale(1.025) rotate(1deg);
+  }
+}
+@keyframes cell-heartbeat {
+  0%,
+  100% {
+    transform: scale(0.9);
+  }
+  12% {
+    transform: scale(0.94);
+  }
+  24% {
+    transform: scale(0.9);
+  }
+}
+@keyframes metabolic-spin {
+  to {
+    transform: scale(calc(0.92 + var(--mutation-intensity, 0) * 0.12)) rotate(360deg);
+  }
+}
+@keyframes nutrient-flow {
+  0% {
+    opacity: 0;
+    transform: translate(-3rem, 12rem) scale(0.3);
+  }
+  18%,
+  78% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translate(18rem, -12rem) scale(1.3);
+  }
+}
+@keyframes nutrient-ripple {
+  from {
+    opacity: 0.9;
+    transform: scale(0.58);
+  }
+  to {
+    opacity: 0;
+    transform: scale(1.18);
+  }
+}
+@keyframes harvest-pop {
+  0% {
+    transform: translate(-50%, -50%) scale(1);
+  }
+  45% {
+    transform: translate(-50%, -50%) scale(1.075);
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
 
 @media (max-width: 700px) {
   :root {
     --space: 0.42rem;
+    --type-label: 0.65rem;
+    --type-detail: 0.75rem;
+    --type-control: 0.78rem;
+    --type-shop-body: 0.9rem;
   }
   body {
     min-width: 0;
@@ -850,7 +923,7 @@ body[data-colony-phase="lineage"] #game-message {
     min-inline-size: 0;
     min-block-size: 2.35rem;
     padding: 0.35rem 0.45rem;
-    font-size: 0.62rem;
+    font-size: var(--type-control);
   }
   .resource-grid {
     top: 3.05rem;
@@ -858,19 +931,19 @@ body[data-colony-phase="lineage"] #game-message {
     gap: 0.24rem;
   }
   .resource-card {
-    min-height: 3rem;
+    min-height: 4rem;
     padding: 0.36rem 0.4rem;
     border-radius: 0.58rem;
   }
   .resource-card p {
     margin-bottom: 0.14rem;
-    font-size: 0.48rem;
+    font-size: var(--type-label);
     letter-spacing: 0.04em;
   }
   #nutrients-value,
   #energy-value,
   #biomass-value {
-    font-size: clamp(1rem, 4.7vw, 1.28rem);
+    font-size: clamp(1.15rem, 4.9vw, 1.38rem);
   }
   #cell-stage::before {
     inset: 5%;
@@ -894,7 +967,7 @@ body[data-colony-phase="lineage"] #game-message {
   .click-hint {
     bottom: -4%;
     padding: 0.32rem 0.48rem;
-    font-size: 0.52rem;
+    font-size: 0.65rem;
   }
   .survival-hud {
     right: var(--space);
@@ -905,21 +978,21 @@ body[data-colony-phase="lineage"] #game-message {
   }
   .survival-hud > div {
     flex: 1 1 0;
-    gap: 0.12rem 0.25rem;
-    padding: 0.34rem 0.4rem;
+    gap: 0.18rem 0.3rem;
+    padding: 0.42rem 0.46rem;
     border-radius: 0.5rem;
   }
   .survival-hud dt {
-    font-size: 0.45rem;
+    font-size: var(--type-label);
   }
   .survival-hud dd {
-    font-size: 0.62rem;
+    font-size: 0.76rem;
   }
   .lineage-expansion p {
-    font-size: 0.42rem;
+    font-size: var(--type-label);
   }
   .immune-threat {
-    font-size: 0.42rem;
+    font-size: 0.65rem;
   }
   #game-message {
     display: none;
@@ -943,11 +1016,11 @@ body[data-colony-phase="lineage"] #game-message {
     padding: 0.8rem 0 0.55rem;
   }
   .console-heading .eyebrow {
-    font-size: 0.55rem;
+    font-size: 0.7rem;
     letter-spacing: 0.08em;
   }
   .console-heading h2 {
-    font-size: 1rem;
+    font-size: 1.2rem;
   }
   .shop-ready {
     min-width: 2rem;
@@ -956,7 +1029,7 @@ body[data-colony-phase="lineage"] #game-message {
   }
   .shop-intro {
     margin-bottom: 0.7rem;
-    font-size: 0.76rem;
+    font-size: var(--type-shop-body);
   }
   .upgrade-grid {
     gap: 0.55rem;
@@ -967,22 +1040,22 @@ body[data-colony-phase="lineage"] #game-message {
     border-radius: 0.72rem;
   }
   .upgrade-card h3 {
-    font-size: 0.92rem;
+    font-size: 1rem;
   }
   .upgrade-card p,
   .upgrade-meta {
-    font-size: 0.76rem !important;
+    font-size: var(--type-shop-body) !important;
   }
   .upgrade-card .signature-tag {
-    font-size: 0.62rem;
+    font-size: 0.75rem;
   }
   button[data-action="buy-upgrade"] {
     min-block-size: 2.75rem;
     padding: 0.5rem 0.7rem;
-    font-size: 0.78rem;
+    font-size: 0.9rem;
   }
   .model-note {
-    font-size: 0.68rem;
+    font-size: 0.8rem;
   }
 }
 

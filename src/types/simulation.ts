@@ -52,6 +52,14 @@ export type UpgradeDefinition = Readonly<{
 }>;
 
 export type EconomySnapshot = Readonly<{
+  /** Net nutrient stock change per simulation second, before a zero-stock clamp. */
+  nutrientStockRate: number;
+  /** Net ATP reserve change per simulation second, before a zero-stock clamp. */
+  energyStockRate: number;
+  /** Net biomass stockpile change per simulation second, before a zero-stock clamp. */
+  biomassStockRate: number;
+  /** Endless colony-spread gain per second; zero until host control is complete. */
+  lineageExpansionRate: number;
   nutrientIncome: number;
   energyProduction: number;
   upkeep: number;
